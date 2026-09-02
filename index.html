@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mystic Tarot - คุณหมีร่ายเวทมนตร์</title>
+  <title>Mystic Bear Tarot & Daily Horoscope - ดูดวงทำนายดวงวันนี้</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,11 +14,11 @@
 
   <style>
     :root {
-      --bg-color-1: #0a0612;
-      --bg-color-2: #190c2e;
-      --bg-color-3: #2d124d;
-      --accent-gold: #f3d884;
-      --accent-glow: rgba(243, 216, 132, 0.5);
+      --bg-color-1: #06030c;
+      --bg-color-2: #120824;
+      --bg-color-3: #220d3a;
+      --accent-gold: #ffe58f;
+      --accent-glow: rgba(255, 229, 143, 0.7);
       --font-main: 'Noto Sans Thai', sans-serif;
     }
 
@@ -37,6 +37,7 @@
     }
 
     #stars-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; pointer-events: none; }
+    #magic-fx-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 100; pointer-events: none; }
 
     .app-container {
       position: relative;
@@ -51,36 +52,33 @@
       text-align: center;
     }
 
-    /* หน้าแรกถามความยินยอม */
+    /* Setup Card */
     .setup-card {
       background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(243, 216, 132, 0.2);
+      border: 1.5px solid rgba(255, 229, 143, 0.35);
       border-radius: 28px;
-      padding: 40px 28px;
+      padding: 36px 24px;
       backdrop-filter: blur(16px);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 229, 143, 0.15);
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       display: flex;
       flex-direction: column;
       align-items: center;
       z-index: 30;
+      transition: transform 0.4s ease, opacity 0.4s ease;
     }
 
-    .setup-card h1 {
-      font-size: 1.45rem;
-      font-weight: 600;
-      color: var(--accent-gold);
-      margin-bottom: 28px;
-      text-shadow: 0 0 16px var(--accent-glow);
-      line-height: 1.6;
-    }
-
-    .btn-group { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 250px; }
+    .brand-subtitle { font-size: 0.75rem; letter-spacing: 2px; color: #cbb9f0; text-transform: uppercase; margin-bottom: 4px; }
+    .brand-title { font-size: 1.5rem; font-weight: 700; color: var(--accent-gold); text-shadow: 0 0 16px var(--accent-glow); margin-bottom: 2px; }
+    .brand-title-en { font-size: 0.85rem; color: #dfd5f5; margin-bottom: 16px; font-weight: 500; }
+    .horoscope-tag { background: rgba(255, 229, 143, 0.12); border: 1px solid rgba(255, 229, 143, 0.3); border-radius: 20px; padding: 4px 14px; font-size: 0.8rem; color: var(--accent-gold); margin-bottom: 24px; }
+    .setup-card h1 { font-size: 1.15rem; font-weight: 600; color: #ffffff; margin-bottom: 24px; line-height: 1.5; }
+    .btn-group { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 260px; }
 
     .btn {
       background: rgba(255, 255, 255, 0.05);
-      border: 1.5px solid rgba(243, 216, 132, 0.3);
+      border: 1.5px solid rgba(255, 229, 143, 0.4);
       color: #ffffff;
       padding: 12px 20px;
       border-radius: 30px;
@@ -93,13 +91,13 @@
     }
 
     .btn:hover, .btn:active {
-      background: rgba(243, 216, 132, 0.2);
+      background: rgba(255, 229, 143, 0.25);
       border-color: var(--accent-gold);
       box-shadow: 0 0 20px var(--accent-glow);
       transform: translateY(-2px);
     }
 
-    .btn-primary { background: rgba(243, 216, 132, 0.15); border-color: var(--accent-gold); font-weight: 600; }
+    .btn-primary { background: rgba(255, 229, 143, 0.2); border-color: var(--accent-gold); font-weight: 600; }
 
     /* น้องหมี */
     .bear-wrapper {
@@ -113,7 +111,7 @@
       z-index: 20;
     }
 
-    .bear-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 12px rgba(243, 216, 132, 0.3)); }
+    .bear-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 12px rgba(255, 229, 143, 0.4)); }
     .wand-arm { transform-origin: 75px 65px; animation: floatWand 3s ease-in-out infinite; }
     .casting .wand-arm { animation: castMagic 0.4s ease-in-out infinite alternate !important; }
 
@@ -127,31 +125,29 @@
 
     #webcam { display: none; }
 
-    /* Badge สถานะด้านบน */
     .hand-status-badge {
       position: absolute;
       top: 15px;
       display: none;
       align-items: center;
       gap: 8px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 229, 143, 0.3);
       padding: 6px 16px;
       border-radius: 20px;
       font-size: 0.85rem;
       font-weight: 500;
-      color: #e2d5ff;
+      color: #f3e8ff;
       backdrop-filter: blur(8px);
       z-index: 20;
     }
 
-    /* วงรีสุ่มไพ่หมุนเต็มหน้าจอ (Full-Screen Ellipse 3D) */
+    /* กองไพ่หมุนวงรี (ปรับขนาดใหญ่ขึ้น) */
     .ellipse-container {
       position: absolute;
       width: 100vw;
       height: 100vh;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       display: none;
       justify-content: center;
       align-items: center;
@@ -159,29 +155,53 @@
       z-index: 5;
     }
 
+    /* ปรับขนาดตัวไพ่ย่อให้ใหญ่ขึ้น */
     .mini-card {
       position: absolute;
-      width: 75px;
-      height: 120px;
-      background: linear-gradient(135deg, #2a1147, #120624);
-      border: 1.5px solid var(--accent-gold);
-      border-radius: 10px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+      width: 105px;
+      height: 168px;
+      background: radial-gradient(circle at center, #3b1b6e 0%, #1c083b 70%, #0d021f 100%);
+      border: 2px solid var(--accent-gold);
+      border-radius: 14px;
+      box-shadow: 0 0 15px rgba(255, 229, 143, 0.3), 0 10px 30px rgba(0, 0, 0, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 2.2rem;
       color: var(--accent-gold);
-      transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+      text-shadow: 0 0 10px var(--accent-glow);
+      transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, border-color 0.3s ease;
       cursor: pointer;
+      overflow: hidden;
     }
 
-    /* ป๊อบอัพ Modal Overlay */
+    .mini-card::before {
+      content: '';
+      position: absolute;
+      top: 5px; left: 5px; right: 5px; bottom: 5px;
+      border: 1px dashed rgba(255, 229, 143, 0.4);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    /* คลาสเอฟเฟกต์เมื่อไพ่ตรงกลางถูกเลือก (Glow Highlight) */
+    .mini-card.selected-glow {
+      border-color: #ffffff !important;
+      box-shadow: 0 0 35px var(--accent-gold), 0 0 70px rgba(255, 229, 143, 0.9) !important;
+      animation: pulseGlow 0.4s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { transform: scale(1.25) translate3d(0, 15px, 50px); }
+      to { transform: scale(1.35) translate3d(0, 15px, 60px); }
+    }
+
+    /* Modal Overlay */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0;
       width: 100vw; height: 100vh;
-      background: rgba(5, 2, 12, 0.82);
+      background: rgba(5, 2, 12, 0.85);
       backdrop-filter: blur(12px);
       display: none;
       justify-content: center;
@@ -190,10 +210,10 @@
     }
 
     .popup-card-box {
-      background: rgba(20, 10, 35, 0.94);
-      border: 1.5px solid var(--accent-gold);
+      background: rgba(22, 11, 40, 0.95);
+      border: 2px solid var(--accent-gold);
       border-radius: 24px;
-      box-shadow: 0 0 50px rgba(243, 216, 132, 0.35);
+      box-shadow: 0 0 50px rgba(255, 229, 143, 0.4);
       width: 90%;
       max-width: 350px;
       padding: 24px 20px;
@@ -201,20 +221,19 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      animation: popupAnim 0.2s ease-out;
+      animation: popupAnim 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    @keyframes popupAnim { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes popupAnim { 0% { transform: scale(0.7); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-    /* รูปไพ่ 3D Display */
     .card-img-wrapper {
-      width: 110px;
-      height: 170px;
-      border: 1.5px solid var(--accent-gold);
-      border-radius: 12px;
+      width: 130px;
+      height: 200px;
+      border: 2px solid var(--accent-gold);
+      border-radius: 14px;
       margin: 10px 0 14px 0;
-      background: linear-gradient(135deg, #1f0b38, #0a0414);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.7), 0 0 15px rgba(243, 216, 132, 0.2);
+      background: radial-gradient(circle at center, #3b1b6e 0%, #120529 100%);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255, 229, 143, 0.3);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -223,113 +242,56 @@
     }
 
     .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-    .card-img-placeholder { font-size: 3rem; color: var(--accent-gold); text-shadow: 0 0 12px var(--accent-glow); }
+    .card-img-placeholder { font-size: 4rem; color: var(--accent-gold); text-shadow: 0 0 16px var(--accent-glow); }
 
     .card-header { font-size: 0.72rem; letter-spacing: 2px; color: #a393c8; font-weight: 600; }
-    .card-title { font-size: 1.25rem; font-weight: 600; color: var(--accent-gold); margin-bottom: 1px; }
-    .card-title-en { font-size: 0.78rem; color: #9f8ec2; margin-bottom: 8px; }
+    .card-title { font-size: 1.3rem; font-weight: 600; color: var(--accent-gold); margin-bottom: 1px; }
+    .card-title-en { font-size: 0.8rem; color: #9f8ec2; margin-bottom: 8px; }
     .card-keywords { display: flex; wrap: wrap; gap: 4px; justify-content: center; margin-bottom: 10px; }
-    .tag { font-size: 0.68rem; font-weight: 500; background: rgba(243, 216, 132, 0.1); border: 1px solid rgba(243, 216, 132, 0.3); color: var(--accent-gold); padding: 2px 6px; border-radius: 8px; }
+    .tag { font-size: 0.68rem; font-weight: 500; background: rgba(255, 229, 143, 0.15); border: 1px solid rgba(255, 229, 143, 0.4); color: var(--accent-gold); padding: 2px 6px; border-radius: 8px; }
     .card-meaning { font-size: 0.83rem; line-height: 1.5; color: #ded5f5; text-align: justify; overflow-y: auto; max-height: 110px; margin-bottom: 16px; padding: 0 4px; }
 
     .popup-actions { display: flex; gap: 8px; width: 100%; justify-content: center; }
     .popup-actions .btn { flex: 1; padding: 10px 8px; font-size: 0.85rem; }
 
-    /* ระบบดาวคะแนน (Star Rating System) */
-    .star-rating {
-      display: flex;
-      gap: 10px;
-      margin: 16px 0;
-      direction: row-reverse;
-    }
-
+    .star-rating { display: flex; gap: 10px; margin: 16px 0; direction: row-reverse; }
     .star-rating input { display: none; }
-    .star-rating label {
-      font-size: 2.3rem;
-      color: rgba(255, 255, 255, 0.18);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
+    .star-rating label { font-size: 2.3rem; color: rgba(255, 255, 255, 0.18); cursor: pointer; transition: all 0.2s ease; }
+    .star-rating label:hover, .star-rating label:hover ~ label, .star-rating input:checked ~ label { color: var(--accent-gold); text-shadow: 0 0 15px var(--accent-glow); }
 
-    .star-rating label:hover,
-    .star-rating label:hover ~ label,
-    .star-rating input:checked ~ label {
-      color: var(--accent-gold);
-      text-shadow: 0 0 15px var(--accent-glow);
-    }
-
-    .rating-feedback {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--accent-gold);
-      height: 28px;
-      margin-bottom: 12px;
-    }
-
-    /* กล่องขอบคุณ + เครดิตขนาดใหญ่ (Hero Credits) */
-    .thank-box {
-      width: 92%;
-      max-width: 440px;
-      padding: 36px 24px;
-      background: rgba(22, 10, 38, 0.95);
-      border: 2px solid var(--accent-gold);
-      border-radius: 28px;
-      box-shadow: 0 0 60px rgba(243, 216, 132, 0.45);
-    }
-
-    .hero-credits {
-      background: rgba(243, 216, 132, 0.06);
-      border: 1px solid rgba(243, 216, 132, 0.3);
-      border-radius: 20px;
-      padding: 22px 16px;
-      margin: 20px 0;
-      box-shadow: inset 0 0 15px rgba(243, 216, 132, 0.1);
-    }
-
-    .credit-title-th {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-
-    .credit-title-en {
-      font-size: 0.95rem;
-      color: #cbb9f0;
-      margin-bottom: 12px;
-    }
-
-    .credit-author {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--accent-gold);
-      letter-spacing: 0.5px;
-      text-shadow: 0 0 12px var(--accent-glow);
-    }
+    .rating-feedback { font-size: 1.1rem; font-weight: 600; color: var(--accent-gold); height: 28px; margin-bottom: 12px; }
+    .thank-box { width: 92%; max-width: 440px; padding: 36px 24px; background: rgba(22, 10, 38, 0.95); border: 2px solid var(--accent-gold); border-radius: 28px; box-shadow: 0 0 60px rgba(255, 229, 143, 0.45); }
+    .hero-credits { background: rgba(255, 229, 143, 0.08); border: 1px solid rgba(255, 229, 143, 0.35); border-radius: 20px; padding: 22px 16px; margin: 20px 0; box-shadow: inset 0 0 15px rgba(255, 229, 143, 0.1); }
+    .credit-title-th { font-size: 1.1rem; font-weight: 600; color: #ffffff; margin-bottom: 4px; }
+    .credit-title-en { font-size: 0.95rem; color: #cbb9f0; margin-bottom: 12px; }
+    .credit-author { font-size: 1.2rem; font-weight: 700; color: var(--accent-gold); letter-spacing: 0.5px; text-shadow: 0 0 12px var(--accent-glow); }
   </style>
 </head>
 <body>
 
   <canvas id="stars-canvas"></canvas>
+  <canvas id="magic-fx-canvas"></canvas>
 
   <div class="app-container">
-    
-    <!-- หน้าแรกถามความยินยอม -->
     <div id="setup-screen" class="setup-card">
-      <h1>ต้องการร่ายเวทมนต์กับคุณหมีหรือไม่</h1>
+      <div class="brand-subtitle">🔮 TAROT & HOROSCOPE 🔮</div>
+      <div class="brand-title">คุณหมีทำนายดวงยิปซี</div>
+      <div class="brand-title-en">Mystic Bear Daily Horoscope</div>
+      <div class="horoscope-tag">✨ ทำนายดวงวันนี้ • Today's Fortune Reading ✨</div>
+      
+      <h1>ต้องการร่ายเวทมนตร์กับคุณหมีหรือไม่?</h1>
+      
       <div class="btn-group">
-        <button class="btn btn-primary" onclick="initMagicMode()">ต้องการ</button>
-        <button class="btn" onclick="initTouchMode()">ไม่เป็นไร</button>
+        <button class="btn btn-primary" onclick="handleSetupChoice(true)">✨ ต้องการ (เปิดกล้องร่ายมนต์)</button>
+        <button class="btn" onclick="handleSetupChoice(false)">👋 ไม่เป็นไร (โหมดแตะสัมผัส)</button>
       </div>
     </div>
 
-    <!-- Badge สถานะด้านบน -->
     <div id="hand-status" class="hand-status-badge">
       <span id="hand-icon">✋</span>
       <span id="hand-text">กำลังค้นหามือ...</span>
     </div>
 
-    <!-- น้องหมี -->
     <div id="bear-container" class="bear-wrapper">
       <div class="magic-sparkles">
         <span class="sparkle">✨</span><span class="sparkle">⭐</span><span class="sparkle">✨</span>
@@ -338,9 +300,9 @@
         <circle cx="35" cy="35" r="14" fill="#a47854" /><circle cx="35" cy="35" r="8" fill="#f3cbb0" />
         <circle cx="85" cy="35" r="14" fill="#a47854" /><circle cx="85" cy="35" r="8" fill="#f3cbb0" />
         <circle cx="60" cy="55" r="32" fill="#bc8c65" />
-        <path d="M 32 40 Q 60 10 88 40 Z" fill="#2d124d" stroke="#f3d884" stroke-width="1.5"/>
-        <ellipse cx="60" cy="40" rx="30" ry="6" fill="#190c2e" stroke="#f3d884" stroke-width="1.5"/>
-        <circle cx="60" cy="18" r="3" fill="#f3d884" />
+        <path d="M 32 40 Q 60 10 88 40 Z" fill="#2d124d" stroke="#ffe58f" stroke-width="1.5"/>
+        <ellipse cx="60" cy="40" rx="30" ry="6" fill="#190c2e" stroke="#ffe58f" stroke-width="1.5"/>
+        <circle cx="60" cy="18" r="3" fill="#ffe58f" />
         <circle cx="48" cy="52" r="3.5" fill="#2c1a0e" /><circle cx="72" cy="52" r="3.5" fill="#2c1a0e" />
         <circle cx="50" cy="50" r="1" fill="#ffffff" /><circle cx="74" cy="50" r="1" fill="#ffffff" />
         <ellipse cx="60" cy="60" rx="9" ry="6" fill="#f3cbb0" /><ellipse cx="60" cy="58" rx="4" ry="2.5" fill="#2c1a0e" />
@@ -349,30 +311,26 @@
         <path d="M 40 85 Q 60 75 80 85 L 85 110 Q 60 115 35 110 Z" fill="#a47854" />
         <g class="wand-arm">
           <path d="M 72 75 L 95 55" stroke="#795548" stroke-width="3.5" stroke-linecap="round" />
-          <polygon points="95,47 98,53 104,55 98,57 95,63 92,57 86,55 92,53" fill="#f3d884" />
+          <polygon points="95,47 98,53 104,55 98,57 95,63 92,57 86,55 92,53" fill="#ffe58f" />
           <path d="M 70 78 Q 80 72 85 62" stroke="#bc8c65" stroke-width="7" fill="none" />
         </g>
         <path d="M 50 78 Q 40 85 38 95" stroke="#bc8c65" stroke-width="7" fill="none" />
       </svg>
     </div>
 
-    <!-- กองไพ่ / ไพ่สุ่มหมุนวงรี -->
+    <!-- กองไพ่หมุนวงรี -->
     <div id="ellipse-carousel" class="ellipse-container"></div>
-
   </div>
 
-  <!-- 1. ป๊อบอัพผลคำทำนาย + รูปไพ่ -->
+  <!-- Popup Results -->
   <div id="result-modal" class="modal-overlay">
     <div class="popup-card-box">
       <div class="card-header" id="pop-arcana">MAJOR ARCANA</div>
-      
       <div class="card-img-wrapper" id="pop-img-container"></div>
-
       <div class="card-title" id="pop-name-th">ชื่อไพ่</div>
       <div class="card-title-en" id="pop-name-en">Card Name</div>
       <div class="card-keywords" id="pop-keywords"></div>
       <div class="card-meaning" id="pop-meaning">รายละเอียดคำทำนาย...</div>
-
       <div class="popup-actions">
         <button class="btn btn-primary" onclick="resetToDeckState()">🔮 สุ่มใหม่</button>
         <button class="btn" onclick="openRatingModal()">✨ รับคำทำนาย</button>
@@ -380,12 +338,11 @@
     </div>
   </div>
 
-  <!-- 2. ป๊อบอัพให้คะแนนดาว (แสดงดาวที่เลือกชัดเจน) -->
+  <!-- Rating Modal -->
   <div id="rating-modal" class="modal-overlay">
     <div class="popup-card-box">
       <h2 style="color: var(--accent-gold); font-size: 1.25rem;">ให้คะแนนความพึงพอใจ</h2>
       <p style="font-size: 0.85rem; color: #d0c2ee; margin-top: 2px;">Rate Your Experience</p>
-      
       <div class="star-rating">
         <input type="radio" id="star5" name="rating" value="5" onclick="selectRating(5)"><label for="star5">★</label>
         <input type="radio" id="star4" name="rating" value="4" onclick="selectRating(4)"><label for="star4">★</label>
@@ -393,29 +350,24 @@
         <input type="radio" id="star2" name="rating" value="2" onclick="selectRating(2)"><label for="star2">★</label>
         <input type="radio" id="star1" name="rating" value="1" onclick="selectRating(1)"><label for="star1">★</label>
       </div>
-
       <div id="rating-text-feedback" class="rating-feedback"></div>
-
       <button class="btn btn-primary" style="width: 100%;" onclick="confirmRating()">ยืนยันให้คะแนน</button>
     </div>
   </div>
 
-  <!-- 3. ป๊อบอัพขอบคุณ + เครดิตขนาดใหญ่โดดเด่นเต็มจอ -->
+  <!-- Thank You Modal -->
   <div id="thank-modal" class="modal-overlay">
     <div class="popup-card-box thank-box">
       <div style="font-size: 3.2rem; margin-bottom: 8px;">🙏✨</div>
       <h2 style="color: var(--accent-gold); font-size: 1.5rem; margin-bottom: 4px;">ขอบคุณที่ร่วมทำนาย</h2>
       <p style="font-size: 0.95rem; color: #d0c2ee;">Thank you for your reading!</p>
-      
-      <!-- เครดิตใหญ่เด่นชัด -->
       <div class="hero-credits">
         <div class="credit-title-th">เว็บไซต์สุ่มไพ่ยิปซีแบบทดลอง</div>
         <div class="credit-title-en">Trial Tarot Reading Website</div>
-        <div style="margin: 10px 0; border-top: 1px dashed rgba(243,216,132,0.3);"></div>
+        <div style="margin: 10px 0; border-top: 1px dashed rgba(255,229,143,0.4);"></div>
         <div style="font-size: 0.85rem; color: #a894cf; margin-bottom: 4px;">CREATED BY</div>
         <div class="credit-author">Funsiri Hammachukaittikul</div>
       </div>
-
       <button class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1rem;" onclick="finishAndReset()">กลับไปที่กองไพ่ (Back to Deck)</button>
     </div>
   </div>
@@ -423,25 +375,105 @@
   <video id="webcam" playsinline></video>
 
   <script>
-    /* 1. Web Audio API */
+    /* Audio API */
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSpellCastSound() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const now = audioCtx.currentTime;
+      [392.00, 523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + i * 0.06);
+        gain.gain.setValueAtTime(0.2, now + i * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.5);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(now + i * 0.06); osc.stop(now + i * 0.06 + 0.5);
+      });
+    }
 
     function playMagicSound() {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       const now = audioCtx.currentTime;
-      [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+      [523.25, 659.25, 783.99].forEach((freq, i) => {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now + i * 0.08);
-        gain.gain.setValueAtTime(0.12, now + i * 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.4);
+        osc.frequency.setValueAtTime(freq, now + i * 0.07);
+        gain.gain.setValueAtTime(0.1, now + i * 0.07);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.07 + 0.3);
         osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(now + i * 0.08); osc.stop(now + i * 0.08 + 0.4);
+        osc.start(now + i * 0.07); osc.stop(now + i * 0.07 + 0.3);
       });
     }
 
-    /* 2. Tarot Data */
+    /* Magic FX System */
+    const fxCanvas = document.getElementById('magic-fx-canvas');
+    const fxCtx = fxCanvas.getContext('2d');
+    let magicParticles = [];
+
+    function resizeFxCanvas() { fxCanvas.width = window.innerWidth; fxCanvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeFxCanvas); resizeFxCanvas();
+
+    class MagicParticle {
+      constructor(x, y, isHeavy) {
+        this.x = x; this.y = y;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = isHeavy ? (Math.random() * 12 + 4) : (Math.random() * 5 + 2);
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.size = isHeavy ? (Math.random() * 6 + 3) : (Math.random() * 3 + 1.5);
+        this.alpha = 1;
+        this.decay = isHeavy ? (Math.random() * 0.02 + 0.015) : (Math.random() * 0.04 + 0.02);
+        this.color = Math.random() > 0.3 ? '#ffe58f' : '#d2b4ff';
+        this.isStar = Math.random() > 0.5;
+      }
+      update() { this.x += this.vx; this.y += this.vy; this.vx *= 0.96; this.vy *= 0.96; this.alpha -= this.decay; }
+      draw() {
+        fxCtx.save();
+        fxCtx.globalAlpha = Math.max(0, this.alpha);
+        fxCtx.fillStyle = this.color;
+        fxCtx.shadowColor = this.color;
+        fxCtx.shadowBlur = 10;
+        if (this.isStar) {
+          fxCtx.beginPath(); fxCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); fxCtx.fill();
+        } else {
+          fxCtx.font = `${this.size * 3}px sans-serif`; fxCtx.fillText('✨', this.x, this.y);
+        }
+        fxCtx.restore();
+      }
+    }
+
+    function triggerMagicBurst(isHeavy) {
+      const startX = window.innerWidth / 2;
+      const startY = window.innerHeight / 2;
+      for (let i = 0; i < (isHeavy ? 120 : 35); i++) magicParticles.push(new MagicParticle(startX, startY, isHeavy));
+      animateMagicFX();
+    }
+
+    function animateMagicFX() {
+      fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+      magicParticles.forEach((p, index) => {
+        p.update(); p.draw();
+        if (p.alpha <= 0) magicParticles.splice(index, 1);
+      });
+      if (magicParticles.length > 0) requestAnimationFrame(animateMagicFX);
+    }
+
+    function handleSetupChoice(wantMagic) {
+      const setupScreen = document.getElementById('setup-screen');
+      if (wantMagic) { playSpellCastSound(); triggerMagicBurst(true); } 
+      else { playMagicSound(); triggerMagicBurst(false); }
+      setupScreen.style.transform = 'scale(0.8)';
+      setupScreen.style.opacity = '0';
+      setTimeout(() => {
+        setupScreen.style.display = 'none';
+        if (wantMagic) initMagicMode(); else initTouchMode();
+      }, 350);
+    }
+
+    /* Tarot Data */
     let tarotDeck = [];
     fetch('cards.json')
       .then(res => res.json())
@@ -454,7 +486,7 @@
         ];
       });
 
-    /* 3. Background Stars */
+    /* Background Stars */
     const canvas = document.getElementById('stars-canvas');
     const ctx = canvas.getContext('2d');
     let stars = [];
@@ -473,7 +505,7 @@
         const sy = (this.y / this.z) * canvas.height + canvas.height / 2;
         if (sx >= 0 && sx <= canvas.width && sy >= 0 && sy <= canvas.height) {
           ctx.beginPath(); ctx.arc(sx, sy, Math.max(0.2, (1 - this.z / canvas.width) * this.size * 2), 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(243, 216, 132, ${this.alpha})`; ctx.fill();
+          ctx.fillStyle = `rgba(255, 229, 143, ${this.alpha})`; ctx.fill();
         }
       }
     }
@@ -481,11 +513,11 @@
     function animateStars() { ctx.clearRect(0, 0, canvas.width, canvas.height); stars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animateStars); }
     window.addEventListener('resize', resizeCanvas); initStars(); animateStars();
 
-    /* 4. การจัดการสถานะไพ่ (กองไพ่ / หมุนสุ่ม) */
+    /* การจัดการกองไพ่ */
     const carousel = document.getElementById('ellipse-carousel');
-    const totalMiniCards = 10;
+    const totalMiniCards = 14; // เพิ่มจำนวนไพ่เป็น 14 ใบ
     let angleOffset = 0;
-    let currentState = 'DECK'; // 'DECK', 'SHUFFLING', 'POPUP'
+    let currentState = 'DECK';
     let isGestureMode = false;
     let animationFrameId = null;
     let selectedStarCount = 5;
@@ -495,6 +527,7 @@
       for (let i = 0; i < totalMiniCards; i++) {
         const card = document.createElement('div');
         card.className = 'mini-card';
+        card.dataset.index = i;
         card.innerText = '✨';
         card.onclick = () => handleCardClick();
         carousel.appendChild(card);
@@ -503,32 +536,31 @@
       renderDeckState();
     }
 
-    // แสดงผลแบบกองไพ่ซ้อนกันตรงกลาง
     function renderDeckState() {
       currentState = 'DECK';
       const cards = carousel.children;
       for (let i = 0; i < cards.length; i++) {
+        cards[i].classList.remove('selected-glow');
         const offset = (i - cards.length / 2) * 1.5;
         cards[i].style.transform = `translate3d(${offset}px, ${offset * 0.5}px, 0px) rotate(${offset * 0.8}deg) scale(1)`;
         cards[i].style.zIndex = i;
       }
-      if (isGestureMode) {
-        updateBadgeStatus("✋", "แบมือ เพื่อเริ่มหมุนสุ่มไพ่");
-      }
+      if (isGestureMode) updateBadgeStatus("✋", "แบมือ เพื่อเริ่มหมุนสุ่มไพ่");
     }
 
-    // อัปเดตตำแหน่งวงรีระหว่างหมุน
     function updateEllipsePosition() {
       const cards = carousel.children;
-      const rx = Math.min(window.innerWidth * 0.4, 380);
-      const ry = Math.min(window.innerHeight * 0.28, 200);
+      const rx = Math.min(window.innerWidth * 0.42, 420);
+      const ry = Math.min(window.innerHeight * 0.28, 210);
 
       for (let i = 0; i < cards.length; i++) {
         const angle = angleOffset + (i * (2 * Math.PI / cards.length));
         const x = Math.cos(angle) * rx;
         const y = Math.sin(angle) * ry;
-        const scale = 0.65 + (y + ry) / (2 * ry) * 0.45;
+        const scale = 0.6 + (y + ry) / (2 * ry) * 0.5;
         const zIndex = Math.round((y + ry) * 10);
+        
+        cards[i].dataset.y = y; // เก็บค่า Y สำหรับเช็คไพ่ตรงกลางหน้าสุด
         cards[i].style.transform = `translate3d(${x}px, ${y}px, 0px) scale(${scale})`;
         cards[i].style.zIndex = zIndex;
       }
@@ -539,57 +571,76 @@
       document.getElementById('hand-text').innerText = text;
     }
 
-    // เริ่มหมุนสุ่มเมื่อแบมือ
     function startContinuousShuffle() {
-      if (currentState === 'SHUFFLING') return;
+      if (currentState === 'SHUFFLING' || currentState === 'SELECTING') return;
       currentState = 'SHUFFLING';
 
       const bear = document.getElementById('bear-container');
       bear.classList.add('casting');
 
-      if (isGestureMode) {
-        updateBadgeStatus("✊", "กำลังหมุนสุ่ม... (กำมือเพื่อหยุดรับคำทำนาย)");
-      }
+      if (isGestureMode) updateBadgeStatus("✊", "กำลังหมุนสุ่ม... (กำมือเพื่อเลือกไพ่หน้าสุด)");
 
       function loop() {
         if (currentState !== 'SHUFFLING') return;
-        angleOffset += 0.07;
+        angleOffset += 0.04; // ปรับหมุนช้าลง ละมุนขึ้น (จากเดิม 0.07)
         updateEllipsePosition();
         animationFrameId = requestAnimationFrame(loop);
       }
       loop();
     }
 
-    // หยุดหมุนแล้วแสดงผลป๊อบอัพทันที
+    // หยุดหมุนและทำเอฟเฟกต์เรืองแสงที่ไพ่ตรงกลางหน้าสุดก่อนเปิด Modal
     function stopAndShowPopup() {
       if (currentState !== 'SHUFFLING') return;
-      currentState = 'POPUP';
+      currentState = 'SELECTING'; // เข้าสู่ช่วงไฮไลท์ไพ่
 
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
 
       const bear = document.getElementById('bear-container');
       bear.classList.remove('casting');
 
-      const card = tarotDeck[Math.floor(Math.random() * tarotDeck.length)];
-      document.getElementById('pop-arcana').innerText = card.arcana;
-      document.getElementById('pop-name-th').innerText = card.nameTh;
-      document.getElementById('pop-name-en').innerText = card.nameEn;
-      document.getElementById('pop-meaning').innerText = card.meaning;
-      document.getElementById('pop-keywords').innerHTML = card.keywords.map(k => `<span class="tag">${k}</span>`).join('');
+      // 1. ค้นหาไพ่ใบที่อยู่ด้านหน้าสุด (ค่า Y สูงสุด)
+      const cards = Array.from(carousel.children);
+      let frontCard = cards[0];
+      let maxY = parseFloat(frontCard.dataset.y || -9999);
 
-      const imgContainer = document.getElementById('pop-img-container');
-      if (card.image && card.image !== "") {
-        imgContainer.innerHTML = `<img src="${card.image}" alt="${card.nameEn}">`;
-      } else {
-        imgContainer.innerHTML = `<div class="card-img-placeholder">${card.icon || '✨'}</div>`;
-      }
+      cards.forEach(card => {
+        const yVal = parseFloat(card.dataset.y || -9999);
+        if (yVal > maxY) {
+          maxY = yVal;
+          frontCard = card;
+        }
+      });
 
+      // 2. แสดงเอฟเฟกต์เรืองแสง + ซูมไพ่ใบหน้าสุดขึ้นมา
+      frontCard.classList.add('selected-glow');
       playMagicSound();
-      document.getElementById('result-modal').style.display = 'flex';
 
-      if (isGestureMode) {
-        updateBadgeStatus("✨", "อ่านคำทำนายและเลือกการดำเนินการต่อ");
-      }
+      if (isGestureMode) updateBadgeStatus("✨", "เลือกไพ่ใบตรงกลางหน้าสุดแล้ว!");
+
+      // 3. หน่วงเวลา 0.7 วินาที แล้วแสดง Popup คำทำนาย
+      setTimeout(() => {
+        frontCard.classList.remove('selected-glow');
+
+        const card = tarotDeck[Math.floor(Math.random() * tarotDeck.length)];
+        document.getElementById('pop-arcana').innerText = card.arcana;
+        document.getElementById('pop-name-th').innerText = card.nameTh;
+        document.getElementById('pop-name-en').innerText = card.nameEn;
+        document.getElementById('pop-meaning').innerText = card.meaning;
+        document.getElementById('pop-keywords').innerHTML = card.keywords.map(k => `<span class="tag">${k}</span>`).join('');
+
+        const imgContainer = document.getElementById('pop-img-container');
+        if (card.image && card.image !== "") {
+          imgContainer.innerHTML = `<img src="${card.image}" alt="${card.nameEn}">`;
+        } else {
+          imgContainer.innerHTML = `<div class="card-img-placeholder">${card.icon || '✨'}</div>`;
+        }
+
+        playSpellCastSound();
+        triggerMagicBurst(false);
+        document.getElementById('result-modal').style.display = 'flex';
+        currentState = 'POPUP';
+      }, 750);
     }
 
     function handleCardClick() {
@@ -606,7 +657,7 @@
       renderDeckState();
     }
 
-    /* 5. ระบบให้คะแนนดาว + ข้อความตอบรับ */
+    /* Rating & Modal logic */
     function openRatingModal() {
       document.getElementById('result-modal').style.display = 'none';
       document.getElementById('rating-modal').style.display = 'flex';
@@ -624,7 +675,8 @@
     function confirmRating() {
       document.getElementById('rating-modal').style.display = 'none';
       document.getElementById('thank-modal').style.display = 'flex';
-      playMagicSound();
+      playSpellCastSound();
+      triggerMagicBurst(true);
     }
 
     function finishAndReset() {
@@ -633,11 +685,9 @@
       renderDeckState();
     }
 
-    /* 6. ระบบตรวจจับมือ Fast-Response Gesture Detection */
+    /* Webcam Hand Gesture */
     function initTouchMode() {
       isGestureMode = false;
-      playMagicSound();
-      document.getElementById('setup-screen').style.display = 'none';
       document.getElementById('bear-container').style.display = 'flex';
       createCards();
     }
@@ -647,8 +697,6 @@
 
     function initMagicMode() {
       isGestureMode = true;
-      playMagicSound();
-      document.getElementById('setup-screen').style.display = 'none';
       document.getElementById('bear-container').style.display = 'flex';
       document.getElementById('hand-status').style.display = 'flex';
       
@@ -671,31 +719,29 @@
     }
 
     function onHandResults(results) {
-      if (currentState === 'POPUP') return;
+      if (currentState === 'POPUP' || currentState === 'SELECTING') return;
 
       if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
         const landmarks = results.multiHandLandmarks[0];
         const distance = Math.hypot(landmarks[8].x - landmarks[0].x, landmarks[8].y - landmarks[0].y);
         const now = Date.now();
 
-        // 1. แบมือ (Open Hand) -> เริ่มหมุนสุ่มไพ่
         if (distance >= 0.28) {
           fistHoldStartTime = 0;
           if (currentState === 'DECK') {
             if (openHoldStartTime === 0) openHoldStartTime = now;
-            else if (now - openHoldStartTime > 100) { // ตอบสนองไว 100ms
+            else if (now - openHoldStartTime > 100) {
               startContinuousShuffle();
               openHoldStartTime = 0;
             }
           }
         } 
-        // 2. กำมือ (Fist) -> หยุดหมุนและเด้งป๊อบอัพทันที
         else if (distance < 0.22) {
           openHoldStartTime = 0;
           if (currentState === 'SHUFFLING') {
             if (fistHoldStartTime === 0) fistHoldStartTime = now;
-            else if (now - fistHoldStartTime > 100) { // ตอบสนองไวทันใจ 100ms!
-              updateBadgeStatus("✊", "หยุดหมุนแล้ว!");
+            else if (now - fistHoldStartTime > 100) {
+              updateBadgeStatus("✊", "เลือกไพ่สำเร็จ!");
               fistHoldStartTime = 0;
               stopAndShowPopup();
             }

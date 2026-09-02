@@ -52,7 +52,6 @@
       text-align: center;
     }
 
-    /* พื้นหลังหัวข้อหลัก (Minimalist & Magical Style) - ขยายชื่อให้ใหญ่ขึ้นตามแบบ */
     .background-brand-header {
       position: absolute;
       top: 30px;
@@ -75,7 +74,7 @@
 
     .brand-title {
       font-weight: 700;
-      font-size: 2.2rem; /* ขยายให้ใหญ่ขึ้นชัดเจนตามบรีฟ */
+      font-size: 2.2rem;
       color: var(--accent-gold);
       text-shadow: 0 0 22px var(--accent-glow);
       letter-spacing: 0.5px;
@@ -89,7 +88,6 @@
       letter-spacing: 1px;
     }
 
-    /* เมื่อเข้าสู่โหมดสุ่มไพ่ หัวข้อจะย่อขนาดไปอยู่ที่มุมขวาบน */
     .background-brand-header.minimized {
       top: 15px;
       right: 20px;
@@ -100,7 +98,6 @@
       opacity: 0.85;
     }
 
-    /* ปุ่มลูกศรย้อนหน้าเล็กๆ (มุมซ้ายบน) */
     .back-nav-btn {
       position: absolute;
       top: 18px;
@@ -129,7 +126,6 @@
       transform: scale(1.08);
     }
 
-    /* Setup Card */
     .setup-card {
       background: rgba(255, 255, 255, 0.03);
       border: 1.5px solid rgba(255, 229, 143, 0.35);
@@ -138,7 +134,7 @@
       backdrop-filter: blur(16px);
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 229, 143, 0.15);
       width: 100%;
-      max-width: 480px; /* ขยายความกว้างกล่องนิดหน่อยเพื่อให้ปุ่มแนวนอนวางได้พอดี */
+      max-width: 480px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -147,7 +143,6 @@
       transition: transform 0.4s ease, opacity 0.4s ease;
     }
 
-    /* แท็กข้อความแนวยาวตามที่วาด */
     .horoscope-tag {
       font-weight: 400;
       background: rgba(255, 229, 143, 0.1);
@@ -171,7 +166,6 @@
       line-height: 1.5;
     }
 
-    /* ปรับปุ่มเลือกโหมดให้เรียงเป็นแถวแนวนอน (ซ้าย-ขวา) ตามแบบร่าง */
     .btn-group { 
       display: flex; 
       flex-direction: row; 
@@ -206,7 +200,6 @@
 
     .btn-primary { background: rgba(255, 229, 143, 0.2); border-color: var(--accent-gold); font-weight: 600; }
 
-    /* น้องหมี */
     .bear-wrapper {
       position: absolute;
       top: 35px;
@@ -249,7 +242,6 @@
       z-index: 20;
     }
 
-    /* กองไพ่หมุนวงรี */
     .ellipse-container {
       position: absolute;
       width: 100vw;
@@ -301,7 +293,6 @@
       to { transform: scale(1.35) translate3d(0, 15px, 60px); }
     }
 
-    /* Modal Overlay */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -378,16 +369,13 @@
   <canvas id="magic-fx-canvas"></canvas>
 
   <div class="app-container">
-    <!-- หัวข้อแบรนด์บนพื้นหลัง (ชื่อใหญ่ขึ้น และย่อไปขวาบนอัตโนมัติเมื่อเริ่มเกม) -->
     <div id="background-brand" class="background-brand-header">
       <div class="brand-subtitle">Mystic Bear Tarot & Daily Horoscope</div>
       <div class="brand-title">คุณหมีทำนายดวง</div>
     </div>
 
-    <!-- ปุ่มลูกศรย้อนหน้าเล็กๆ มุมซ้ายบน -->
     <button id="back-nav-btn" class="back-nav-btn" onclick="returnToSetup()" title="ย้อนกลับ">←</button>
 
-    <!-- Setup Card -->
     <div id="setup-screen" class="setup-card">
       <div class="horoscope-tag">✨ ทำนายดวงวันนี้ • Today's Fortune Reading ✨</div>
       <h1>ต้องการร่ายเวทมนตร์กับคุณหมีหรือไม่?</h1>
@@ -428,11 +416,9 @@
       </svg>
     </div>
 
-    <!-- กองไพ่หมุนวงรี -->
     <div id="ellipse-carousel" class="ellipse-container"></div>
   </div>
 
-  <!-- Popup Results -->
   <div id="result-modal" class="modal-overlay">
     <div class="popup-card-box">
       <div class="card-header" id="pop-arcana">MAJOR ARCANA</div>
@@ -448,7 +434,6 @@
     </div>
   </div>
 
-  <!-- Rating Modal -->
   <div id="rating-modal" class="modal-overlay">
     <div class="popup-card-box">
       <h2 style="color: var(--accent-gold); font-size: 1.25rem;">ให้คะแนนความพึงพอใจ</h2>
@@ -465,7 +450,6 @@
     </div>
   </div>
 
-  <!-- Thank You Modal -->
   <div id="thank-modal" class="modal-overlay">
     <div class="popup-card-box thank-box">
       <div style="font-size: 3.2rem; margin-bottom: 8px;">🙏✨</div>
@@ -609,16 +593,103 @@
       playMagicSound();
     }
 
-    let tarotDeck = [];
+    let fullTarotDeck = [];
+    let currentPool = [];
+    let lastDrawnCardId = null;
+
+    function generateFull78Deck() {
+      let deck = [];
+      const majorNames = [
+        "The Fool", "The Magician", "The High Priestess", "The Empress", "The Emperor", 
+        "The Hierophant", "The Lovers", "The Chariot", "Strength", "The Hermit", 
+        "Wheel of Fortune", "Justice", "The Hanged Man", "Death", "Temperance", 
+        "The Devil", "The Tower", "The Star", "The Moon", "The Sun", "Judgement", "The World"
+      ];
+      majorNames.forEach((name, idx) => {
+        deck.push({
+          id: `m${idx < 10 ? '0' + idx : idx}`,
+          arcana: "Major Arcana",
+          nameEn: name,
+          nameTh: `ไพ่เมเจอร์อาคานา ${idx + 1}`,
+          icon: "🔮",
+          image: "",
+          keywords: ["โชคชะตา", "พลังงานหลัก"],
+          meaning: `คำทำนายเชิงลึกของไพ่ ${name} บ่งบอกถึงช่วงเวลาสำคัญและการเปลี่ยนแปลงครั้งใหญ่ในชีวิตที่คุณต้องตระหนักรู้`
+        });
+      });
+
+      const suits = [
+        { name: "Wands", th: "ไม้เท้า", icon: "🪄" },
+        { name: "Cups", th: "ถ้วย", icon: "🏆" },
+        { name: "Swords", th: "ดาบ", icon: "⚔️" },
+        { name: "Pentacles", th: "เหรียญ", icon: "🪙" }
+      ];
+      const ranks = [
+        { r: "Ace", th: "เอซ" }, { r: "Two", th: "สอง" }, { r: "Three", th: "สาม" }, { r: "Four", th: "สี่" },
+        { r: "Five", th: "ห้า" }, { r: "Six", th: "หก" }, { r: "Seven", th: "เจ็ด" }, { r: "Eight", th: "แปด" },
+        { r: "Nine", th: "เก้า" }, { r: "Ten", th: "สิบ" }, { r: "Page", th: "เด็กถือ" }, { r: "Knight", th: "อัศวิน" },
+        { r: "Queen", th: "ราชินี" }, { r: "King", th: "ราชา" }
+      ];
+
+      suits.forEach((s, sIdx) => {
+        ranks.forEach((rk, rIdx) => {
+          deck.push({
+            id: `minor_${sIdx}_${rIdx}`,
+            arcana: `Minor Arcana (${s.name})`,
+            nameEn: `${rk.r} of ${s.name}`,
+            nameTh: `${rk.th}${s.th}`,
+            icon: s.icon,
+            image: "",
+            keywords: [s.th, "สถานการณ์รอบตัว"],
+            meaning: `คำทำนายของไพ่ ${rk.r} of ${s.name} สะท้อนถึงรายละเอียดในชีวิตประจำวันและการตัดสินใจในเรื่อง${s.th}`
+          });
+        });
+      });
+      return deck;
+    }
+
     fetch('cards.json')
       .then(res => res.json())
-      .then(data => { tarotDeck = data; })
+      .then(data => {
+        if (data && data.length >= 78) {
+          fullTarotDeck = data;
+        } else {
+          fullTarotDeck = generateFull78Deck();
+        }
+        resetDeckPool();
+      })
       .catch(() => {
-        tarotDeck = [
-          { id: "m00", arcana: "Major Arcana", nameEn: "The Fool", nameTh: "ผู้เริ่มต้น", icon: "🃏", image: "", keywords: ["จุดเริ่มต้น", "อิสระ"], meaning: "คุณกำลังยืนอยู่ตรงจุดเริ่มต้นของการเดินทางครั้งใหม่ในชีวิต ปล่อยวางความกลัวและเชื่อมั่นในสัญชาตญาณ" },
-          { id: "m01", arcana: "Major Arcana", nameEn: "The Magician", nameTh: "นักมายากล", icon: "🪄", image: "", keywords: ["ศักยภาพ", "ไหวพริบ"], meaning: "ทรัพยากรทุกอย่างพร้อมแล้วในมือคุณ จงมั่นใจและเริ่มแปรเปลี่ยนความฝันให้กลายเป็นความจริง" }
-        ];
+        fullTarotDeck = generateFull78Deck();
+        resetDeckPool();
       });
+
+    function resetDeckPool() {
+      currentPool = [...fullTarotDeck];
+      for (let i = currentPool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [currentPool[i], currentPool[j]] = [currentPool[j], currentPool[i]];
+      }
+      lastDrawnCardId = null;
+    }
+
+    function drawRandomCard() {
+      if (currentPool.length === 0) {
+        resetDeckPool();
+      }
+
+      let selectedCardIndex = 0;
+      let selectedCard = currentPool[selectedCardIndex];
+
+      if (selectedCard.id === lastDrawnCardId && currentPool.length > 1) {
+        selectedCardIndex = 1;
+        selectedCard = currentPool[selectedCardIndex];
+      }
+
+      currentPool.splice(selectedCardIndex, 1);
+      lastDrawnCardId = selectedCard.id;
+
+      return selectedCard;
+    }
 
     const canvas = document.getElementById('stars-canvas');
     const ctx = canvas.getContext('2d');
@@ -661,7 +732,11 @@
         card.className = 'mini-card';
         card.dataset.index = i;
         card.innerText = '✨';
-        card.onclick = () => handleCardClick();
+        // รองรับการคลิกเลือกไพ่ใบที่กำลังหมุนอยู่ได้ทันทีทุกใบ
+        card.onclick = (e) => {
+          e.stopPropagation();
+          handleCardSpecificClick(card);
+        };
         carousel.appendChild(card);
       }
       carousel.style.display = 'flex';
@@ -723,13 +798,6 @@
 
     function stopAndShowPopup() {
       if (currentState !== 'SHUFFLING') return;
-      currentState = 'SELECTING';
-
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
-
-      const bear = document.getElementById('bear-container');
-      bear.classList.remove('casting');
-
       const cards = Array.from(carousel.children);
       let frontCard = cards[0];
       let maxY = parseFloat(frontCard.dataset.y || -9999);
@@ -741,16 +809,28 @@
           frontCard = card;
         }
       });
+      stopAndSelectSpecificCard(frontCard);
+    }
 
-      frontCard.classList.add('selected-glow');
+    function stopAndSelectSpecificCard(targetCard) {
+      if (currentState !== 'SHUFFLING') return;
+      currentState = 'SELECTING';
+
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+      const bear = document.getElementById('bear-container');
+      bear.classList.remove('casting');
+
+      targetCard.classList.add('selected-glow');
       playMagicSound();
 
-      if (isGestureMode) updateBadgeStatus("✨", "เลือกไพ่ใบตรงกลางหน้าสุดแล้ว!");
+      if (isGestureMode) updateBadgeStatus("✨", "เลือกไพ่สำเร็จ!");
 
       setTimeout(() => {
-        frontCard.classList.remove('selected-glow');
+        targetCard.classList.remove('selected-glow');
 
-        const card = tarotDeck[Math.floor(Math.random() * tarotDeck.length)];
+        const card = drawRandomCard();
+
         document.getElementById('pop-arcana').innerText = card.arcana;
         document.getElementById('pop-name-th').innerText = card.nameTh;
         document.getElementById('pop-name-en').innerText = card.nameEn;
@@ -771,17 +851,18 @@
       }, 750);
     }
 
-    function handleCardClick() {
+    function handleCardSpecificClick(clickedCard) {
       if (currentState === 'DECK') {
         startContinuousShuffle();
       } else if (currentState === 'SHUFFLING') {
-        stopAndShowPopup();
+        stopAndSelectSpecificCard(clickedCard);
       }
     }
 
     function resetToDeckState() {
       document.getElementById('result-modal').style.display = 'none';
       playMagicSound();
+      resetDeckPool();
       renderDeckState();
     }
 
@@ -809,12 +890,14 @@
     function finishAndReset() {
       document.getElementById('thank-modal').style.display = 'none';
       playMagicSound();
+      resetDeckPool();
       renderDeckState();
     }
 
     function initTouchMode() {
       isGestureMode = false;
       document.getElementById('bear-container').style.display = 'flex';
+      resetDeckPool();
       createCards();
     }
 
@@ -826,6 +909,7 @@
       document.getElementById('bear-container').style.display = 'flex';
       document.getElementById('hand-status').style.display = 'flex';
       
+      resetDeckPool();
       createCards();
       updateBadgeStatus("✨", "กำลังเปิดระบบตรวจจับมือ...");
 

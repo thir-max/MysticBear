@@ -52,10 +52,10 @@
       text-align: center;
     }
 
-    /* พื้นหลังหัวข้อหลัก (Minimalist & Magical Style) */
+    /* พื้นหลังหัวข้อหลัก (Minimalist & Magical Style) - ขยายชื่อให้ใหญ่ขึ้นตามแบบ */
     .background-brand-header {
       position: absolute;
-      top: 36px;
+      top: 30px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -66,7 +66,7 @@
 
     .brand-subtitle {
       font-weight: 300;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       letter-spacing: 3px;
       color: #cbb9f0;
       text-transform: uppercase;
@@ -75,16 +75,16 @@
 
     .brand-title {
       font-weight: 700;
-      font-size: 1.6rem;
+      font-size: 2.2rem; /* ขยายให้ใหญ่ขึ้นชัดเจนตามบรีฟ */
       color: var(--accent-gold);
-      text-shadow: 0 0 18px var(--accent-glow);
+      text-shadow: 0 0 22px var(--accent-glow);
       letter-spacing: 0.5px;
       margin-bottom: 2px;
     }
 
     .brand-title-en {
       font-weight: 400;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: #dfd5f5;
       letter-spacing: 1px;
     }
@@ -138,7 +138,7 @@
       backdrop-filter: blur(16px);
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 229, 143, 0.15);
       width: 100%;
-      max-width: 420px;
+      max-width: 480px; /* ขยายความกว้างกล่องนิดหน่อยเพื่อให้ปุ่มแนวนอนวางได้พอดี */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -147,16 +147,20 @@
       transition: transform 0.4s ease, opacity 0.4s ease;
     }
 
+    /* แท็กข้อความแนวยาวตามที่วาด */
     .horoscope-tag {
       font-weight: 400;
       background: rgba(255, 229, 143, 0.1);
       border: 1px solid rgba(255, 229, 143, 0.3);
       border-radius: 20px;
-      padding: 5px 16px;
-      font-size: 0.8rem;
+      padding: 8px 24px;
+      font-size: 0.85rem;
       color: var(--accent-gold);
       margin-bottom: 22px;
       letter-spacing: 0.5px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
     }
 
     .setup-card h1 {
@@ -167,20 +171,30 @@
       line-height: 1.5;
     }
 
-    .btn-group { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 260px; }
+    /* ปรับปุ่มเลือกโหมดให้เรียงเป็นแถวแนวนอน (ซ้าย-ขวา) ตามแบบร่าง */
+    .btn-group { 
+      display: flex; 
+      flex-direction: row; 
+      gap: 12px; 
+      width: 100%; 
+      justify-content: center; 
+    }
 
     .btn {
       background: rgba(255, 255, 255, 0.05);
       border: 1.5px solid rgba(255, 229, 143, 0.4);
       color: #ffffff;
-      padding: 12px 20px;
+      padding: 12px 14px;
       border-radius: 30px;
       font-family: var(--font-main);
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       font-weight: 500;
       cursor: pointer;
       backdrop-filter: blur(10px);
       transition: all 0.3s ease;
+      flex: 1;
+      text-align: center;
+      white-space: nowrap;
     }
 
     .btn:hover, .btn:active {
@@ -364,7 +378,7 @@
   <canvas id="magic-fx-canvas"></canvas>
 
   <div class="app-container">
-    <!-- หัวข้อแบรนด์บนพื้นหลัง (ย่อไปขวาบนอัตโนมัติเมื่อเริ่มเกม) -->
+    <!-- หัวข้อแบรนด์บนพื้นหลัง (ชื่อใหญ่ขึ้น และย่อไปขวาบนอัตโนมัติเมื่อเริ่มเกม) -->
     <div id="background-brand" class="background-brand-header">
       <div class="brand-subtitle">Mystic Bear Tarot & Daily Horoscope</div>
       <div class="brand-title">คุณหมีทำนายดวง</div>
@@ -378,7 +392,7 @@
       <div class="horoscope-tag">✨ ทำนายดวงวันนี้ • Today's Fortune Reading ✨</div>
       <h1>ต้องการร่ายเวทมนตร์กับคุณหมีหรือไม่?</h1>
       <div class="btn-group">
-        <button class="btn btn-primary" onclick="handleSetupChoice(true)">✨ ร่ายมนต์กับคุณหมี (เปิดกล้อง)</button>
+        <button class="btn btn-primary" onclick="handleSetupChoice(true)">✨ ร่ายมนต์ (เปิดกล้อง)</button>
         <button class="btn" onclick="handleSetupChoice(false)">👋 โหมดแตะสัมผัส</button>
       </div>
     </div>
@@ -566,7 +580,6 @@
       setupScreen.style.transform = 'scale(0.8)';
       setupScreen.style.opacity = '0';
 
-      // ย่อหัวข้อไปมุมขวาบน และแสดงปุ่มย้อนกลับ
       backgroundBrand.classList.add('minimized');
       backNavBtn.style.display = 'flex';
 

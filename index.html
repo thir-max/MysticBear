@@ -51,22 +51,7 @@
       text-align: center;
     }
 
-    /* Footer Credential */
-    .site-footer {
-      position: fixed;
-      bottom: 12px;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      font-size: 0.78rem;
-      color: rgba(243, 216, 132, 0.7);
-      letter-spacing: 0.5px;
-      z-index: 30;
-      pointer-events: none;
-      text-shadow: 0 0 8px rgba(0,0,0,0.8);
-    }
-
-    /* หน้าเลือกโหมด */
+    /* หน้าแรกถามความยินยอม */
     .setup-card {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(243, 216, 132, 0.2);
@@ -119,9 +104,9 @@
     /* น้องหมี */
     .bear-wrapper {
       position: absolute;
-      top: 30px;
-      width: 85px;
-      height: 85px;
+      top: 35px;
+      width: 90px;
+      height: 90px;
       display: none;
       justify-content: center;
       align-items: center;
@@ -160,7 +145,7 @@
       z-index: 20;
     }
 
-    /* วงรีสุ่มไพ่หมุนเต็มหน้าจอ */
+    /* วงรีสุ่มไพ่หมุนเต็มหน้าจอ (Full-Screen Ellipse 3D) */
     .ellipse-container {
       position: absolute;
       width: 100vw;
@@ -191,12 +176,12 @@
       cursor: pointer;
     }
 
-    /* Modal Pop-up */
+    /* ป๊อบอัพ Modal Overlay */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0;
       width: 100vw; height: 100vh;
-      background: rgba(5, 2, 12, 0.8);
+      background: rgba(5, 2, 12, 0.78);
       backdrop-filter: blur(10px);
       display: none;
       justify-content: center;
@@ -204,85 +189,95 @@
       z-index: 50;
     }
 
-    .tarot-popup {
-      background: rgba(20, 10, 35, 0.94);
+    .popup-card-box {
+      background: rgba(20, 10, 35, 0.92);
       border: 1.5px solid var(--accent-gold);
-      border-radius: 24px;
+      border-radius: 22px;
       box-shadow: 0 0 45px rgba(243, 216, 132, 0.35);
       width: 90%;
       max-width: 340px;
-      padding: 24px 20px;
+      padding: 22px 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      animation: popupAnim 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: popupAnim 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     @keyframes popupAnim { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-    /* กรอบแสดงรูปหน้าไพ่ / 3D Card Graphic */
-    .card-img-container {
-      width: 130px;
-      height: 200px;
-      margin: 10px 0 14px 0;
-      border-radius: 12px;
+    /* รูปไพ่ 3D Display */
+    .card-img-wrapper {
+      width: 110px;
+      height: 170px;
       border: 1.5px solid var(--accent-gold);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5), 0 0 15px rgba(243, 216, 132, 0.2);
-      overflow: hidden;
-      background: linear-gradient(135deg, #1d0a33, #0a0414);
+      border-radius: 12px;
+      margin: 10px 0 14px 0;
+      background: linear-gradient(135deg, #1f0b38, #0a0414);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.7), 0 0 15px rgba(243, 216, 132, 0.2);
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
+      align-items: center;
+      overflow: hidden;
       position: relative;
     }
 
-    .card-img-container img {
+    .card-img-wrapper img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .card-fallback-3d {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
+    .card-img-placeholder {
+      font-size: 3rem;
       color: var(--accent-gold);
-      font-size: 2.2rem;
-      text-shadow: 0 0 10px var(--accent-glow);
+      text-shadow: 0 0 12px var(--accent-glow);
     }
 
-    .card-header { font-size: 0.75rem; letter-spacing: 2px; color: #a393c8; font-weight: 600; margin-bottom: 2px; }
-    .card-title { font-size: 1.25rem; font-weight: 600; color: var(--accent-gold); margin-bottom: 2px; }
-    .card-title-en { font-size: 0.8rem; color: #9f8ec2; margin-bottom: 8px; }
+    .card-header { font-size: 0.72rem; letter-spacing: 2px; color: #a393c8; font-weight: 600; }
+    .card-title { font-size: 1.25rem; font-weight: 600; color: var(--accent-gold); margin-bottom: 1px; }
+    .card-title-en { font-size: 0.78rem; color: #9f8ec2; margin-bottom: 8px; }
     .card-keywords { display: flex; wrap: wrap; gap: 4px; justify-content: center; margin-bottom: 10px; }
-    .tag { font-size: 0.7rem; font-weight: 500; background: rgba(243, 216, 132, 0.1); border: 1px solid rgba(243, 216, 132, 0.3); color: var(--accent-gold); padding: 2px 6px; border-radius: 8px; }
-    .card-meaning { font-size: 0.82rem; line-height: 1.5; color: #ded5f5; text-align: justify; overflow-y: auto; max-height: 100px; margin-bottom: 16px; padding: 0 4px; }
+    .tag { font-size: 0.68rem; font-weight: 500; background: rgba(243, 216, 132, 0.1); border: 1px solid rgba(243, 216, 132, 0.3); color: var(--accent-gold); padding: 2px 6px; border-radius: 8px; }
+    .card-meaning { font-size: 0.83rem; line-height: 1.5; color: #ded5f5; text-align: justify; overflow-y: auto; max-height: 110px; margin-bottom: 16px; padding: 0 4px; }
 
-    .popup-actions { display: flex; gap: 10px; width: 100%; justify-content: center; }
+    .popup-actions { display: flex; gap: 8px; width: 100%; justify-content: center; }
     .popup-actions .btn { flex: 1; padding: 10px 8px; font-size: 0.85rem; }
 
-    /* ป๊อบอัพให้คะแนนดาว */
-    .star-rating-box {
+    /* ระบบดาวคะแนน (Star Rating System) */
+    .star-rating {
       display: flex;
-      gap: 8px;
-      margin: 18px 0;
-      font-size: 1.8rem;
+      gap: 12px;
+      margin: 20px 0 24px 0;
+      direction: row-reverse;
+    }
+
+    .star-rating input { display: none; }
+    .star-rating label {
+      font-size: 2.2rem;
+      color: rgba(255, 255, 255, 0.2);
       cursor: pointer;
+      transition: color 0.2s ease, transform 0.2s ease;
     }
 
-    .star-btn {
-      color: rgba(255, 255, 255, 0.25);
-      transition: transform 0.2s, color 0.2s;
-    }
-
-    .star-btn:hover, .star-btn.active {
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input:checked ~ label {
       color: var(--accent-gold);
-      transform: scale(1.2);
       text-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .star-rating label:active { transform: scale(1.2); }
+
+    /* ข้อความลิขสิทธิ์ / เครดิตสองภาษา */
+    .credits-box {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(243, 216, 132, 0.2);
+      font-size: 0.78rem;
+      color: #bfaedc;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -339,14 +334,14 @@
 
   </div>
 
-  <!-- ป๊อบอัพแสดงผลคำทำนาย + รูปหน้าไพ่ -->
-  <div id="modal-overlay" class="modal-overlay">
-    <div class="tarot-popup">
+  <!-- 1. ป๊อบอัพผลคำทำนาย + รูปไพ่ (Tarot Result Popup) -->
+  <div id="result-modal" class="modal-overlay">
+    <div class="popup-card-box">
       <div class="card-header" id="pop-arcana">MAJOR ARCANA</div>
       
-      <!-- แสดงรูปไพ่ -->
-      <div class="card-img-container" id="pop-card-img-box">
-        <div class="card-fallback-3d" id="pop-card-icon">🃏</div>
+      <!-- โซนแสดงรูปภาพไพ่ -->
+      <div class="card-img-wrapper" id="pop-img-container">
+        <!-- รูปภาพจะถูกแทรกที่นี่ -->
       </div>
 
       <div class="card-title" id="pop-name-th">ชื่อไพ่</div>
@@ -361,36 +356,44 @@
     </div>
   </div>
 
-  <!-- ป๊อบอัพให้คะแนนดาว -->
-  <div id="rating-modal-overlay" class="modal-overlay">
-    <div class="tarot-popup">
-      <div class="card-header">FEEDBACK</div>
-      <div class="card-title" style="margin-top: 6px;">ให้คะแนนคำทำนาย</div>
-      <div class="card-title-en">ประเมินความพึงพอใจการใช้บริการ</div>
+  <!-- 2. ป๊อบอัพให้คะแนนดาว (Rating Modal) -->
+  <div id="rating-modal" class="modal-overlay">
+    <div class="popup-card-box">
+      <h2 style="color: var(--accent-gold); font-size: 1.2rem;">ให้คะแนนความแม่นยำ</h2>
+      <p style="font-size: 0.85rem; color: #d0c2ee; margin-top: 4px;">Rate Your Reading Experience</p>
       
-      <div class="star-rating-box">
-        <span class="star-btn" onclick="rateStars(1)">★</span>
-        <span class="star-btn" onclick="rateStars(2)">★</span>
-        <span class="star-btn" onclick="rateStars(3)">★</span>
-        <span class="star-btn" onclick="rateStars(4)">★</span>
-        <span class="star-btn" onclick="rateStars(5)">★</span>
+      <div class="star-rating">
+        <input type="radio" id="star5" name="rating" value="5" onclick="submitRating(5)"><label for="star5">★</label>
+        <input type="radio" id="star4" name="rating" value="4" onclick="submitRating(4)"><label for="star4">★</label>
+        <input type="radio" id="star3" name="rating" value="3" onclick="submitRating(3)"><label for="star3">★</label>
+        <input type="radio" id="star2" name="rating" value="2" onclick="submitRating(2)"><label for="star2">★</label>
+        <input type="radio" id="star1" name="rating" value="1" onclick="submitRating(1)"><label for="star1">★</label>
       </div>
 
-      <p id="rating-thanks-msg" style="font-size: 0.85rem; color: #e2d5ff; height: 24px; margin-bottom: 12px;"></p>
-
-      <button class="btn btn-primary" style="width: 100%;" onclick="submitRatingAndRestart()">ส่งคะแนน & กลับไปสุ่มใหม่</button>
+      <button class="btn" style="width: 100%;" onclick="submitRating(5)">ข้ามการให้คะแนน (Skip)</button>
     </div>
   </div>
 
-  <!-- Footer Credit ตามโจทย์ -->
-  <footer class="site-footer">
-    หน้าต่างขอบที่ทดลองใช้เว็บไซต์ by Funsiri Hammachukaittikul
-  </footer>
+  <!-- 3. ป๊อบอัพขอบคุณ + โชว์เครดิตสองภาษา (Thank You Modal) -->
+  <div id="thank-modal" class="modal-overlay">
+    <div class="popup-card-box">
+      <div style="font-size: 2.8rem; margin-bottom: 6px;">🙏✨</div>
+      <h2 style="color: var(--accent-gold); font-size: 1.25rem; margin-bottom: 4px;">ขอบคุณที่ใช้บริการ</h2>
+      <p style="font-size: 0.85rem; color: #d0c2ee; margin-bottom: 12px;">Thank you for visiting!</p>
+      
+      <div class="credits-box">
+        <p>เว็บไซต์สุ่มไพ่ยิปซีแบบทดลอง<br><strong>by Funsiri Hammachukaittikul</strong></p>
+        <p style="margin-top: 6px; font-style: italic; opacity: 0.85;">Trial Tarot Reading Website<br><strong>by Funsiri Hammachukaittikul</strong></p>
+      </div>
+
+      <button class="btn btn-primary" style="width: 100%; margin-top: 18px;" onclick="finishAndResume()">กลับไปหมุนสุ่มไพ่ใหม่ (Back to Start)</button>
+    </div>
+  </div>
 
   <video id="webcam" playsinline></video>
 
   <script>
-    /* 1. Web Audio API เสียงเวทมนตร์ */
+    /* 1. Audio API */
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playMagicSound() {
@@ -408,16 +411,16 @@
       });
     }
 
-    /* 2. ฐานข้อมูลไพ่ Tarot พร้อมฟิลด์ image และ icon */
+    /* 2. ฐานข้อมูลไพ่ Tarot (รวมรายละเอียดสัญลักษณ์ 3D & รูปภาพ) */
     let tarotDeck = [];
     fetch('cards.json')
       .then(res => res.json())
       .then(data => { tarotDeck = data; })
       .catch(() => {
         tarotDeck = [
-          { id: "m00", arcana: "Major Arcana", nameEn: "The Fool", nameTh: "ผู้เริ่มต้น", icon: "🃏", image: "images/fool.jpg", keywords: ["จุดเริ่มต้น", "อิสระ"], meaning: "คุณกำลังยืนอยู่ตรงจุดเริ่มต้นของการเดินทางครั้งใหม่ในชีวิต ปล่อยวางความกลัวและเชื่อมั่นในสัญชาตญาณ" },
-          { id: "m01", arcana: "Major Arcana", nameEn: "The Magician", nameTh: "นักมายากล", icon: "🪄", image: "images/magician.jpg", keywords: ["ศักยภาพ", "ไหวพริบ"], meaning: "ทรัพยากรทุกอย่างพร้อมแล้วในมือคุณ จงมั่นใจและเริ่มแปรเปลี่ยนความฝันให้กลายเป็นความจริง" },
-          { id: "m02", arcana: "Major Arcana", nameEn: "The High Priestess", nameTh: "นักบวชหญิง", icon: "🌙", image: "images/priestess.jpg", keywords: ["สัญชาตญาณ", "ปัญญา"], meaning: "คำตอบซ่อนอยู่ในจิตใจของคุณ รับฟังเสียงสัญชาตญาณและสังเกตการณ์อย่างเงียบๆ" }
+          { id: "m00", arcana: "Major Arcana", nameEn: "The Fool", nameTh: "ผู้เริ่มต้น", icon: "🃏", image: "", keywords: ["จุดเริ่มต้น", "อิสระ"], meaning: "คุณกำลังยืนอยู่ตรงจุดเริ่มต้นของการเดินทางครั้งใหม่ในชีวิต ปล่อยวางความกลัวและเชื่อมั่นในสัญชาตญาณ" },
+          { id: "m01", arcana: "Major Arcana", nameEn: "The Magician", nameTh: "นักมายากล", icon: "🪄", image: "", keywords: ["ศักยภาพ", "ไหวพริบ"], meaning: "ทรัพยากรทุกอย่างพร้อมแล้วในมือคุณ จงมั่นใจและเริ่มแปรเปลี่ยนความฝันให้กลายเป็นความจริง" },
+          { id: "m02", arcana: "Major Arcana", nameEn: "The High Priestess", nameTh: "นักบวชหญิง", icon: "🌙", image: "", keywords: ["สัญชาตญาณ", "ปัญญา"], meaning: "คำตอบซ่อนอยู่ในจิตใจของคุณ รับฟังเสียงสัญชาตญาณและสังเกตการณ์อย่างเงียบๆ" }
         ];
       });
 
@@ -511,6 +514,7 @@
       loop();
     }
 
+    /* 5. ป๊อบอัพแสดงรายละเอียด + รูปหน้าไพ่ */
     function stopAndShowPopup() {
       if (!isLooping) return;
       isLooping = false;
@@ -521,7 +525,7 @@
       const bear = document.getElementById('bear-container');
       bear.classList.remove('casting');
 
-      // สุ่มไพ่
+      // สุ่มไพ่ 1 ใบ
       const card = tarotDeck[Math.floor(Math.random() * tarotDeck.length)];
       document.getElementById('pop-arcana').innerText = card.arcana;
       document.getElementById('pop-name-th').innerText = card.nameTh;
@@ -529,18 +533,16 @@
       document.getElementById('pop-meaning').innerText = card.meaning;
       document.getElementById('pop-keywords').innerHTML = card.keywords.map(k => `<span class="tag">${k}</span>`).join('');
 
-      // แสดงภาพหน้าไพ่ (ถ้าไม่มีรูป ให้ fallback เป็น 3D Graphic Icon)
-      const imgBox = document.getElementById('pop-card-img-box');
-      if (card.image) {
-        imgBox.innerHTML = `<img src="${card.image}" alt="${card.nameEn}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'card-fallback-3d\\'>${card.icon || '🃏'}</div>';">`;
+      // แทรกรูปภาพหรือสัญลักษณ์ไพ่
+      const imgContainer = document.getElementById('pop-img-container');
+      if (card.image && card.image !== "") {
+        imgContainer.innerHTML = `<img src="${card.image}" alt="${card.nameEn}">`;
       } else {
-        imgBox.innerHTML = `<div class="card-fallback-3d">${card.icon || '🃏'}</div>`;
+        imgContainer.innerHTML = `<div class="card-img-placeholder">${card.icon || '✨'}</div>`;
       }
 
       playMagicSound();
-
-      // เปิด Pop-up ผลคำทำนาย
-      document.getElementById('modal-overlay').style.display = 'flex';
+      document.getElementById('result-modal').style.display = 'flex';
 
       if (isGestureMode) {
         updateBadgeStatus("✨", "เลือกกดปุ่มด้านล่างเพื่อดำเนินการต่อ");
@@ -548,47 +550,36 @@
     }
 
     function closePopupAndResume() {
-      document.getElementById('modal-overlay').style.display = 'none';
+      document.getElementById('result-modal').style.display = 'none';
       playMagicSound();
       startContinuousShuffle();
     }
 
-    /* 5. ระบบดาวให้คะแนน (Star Rating) */
-    let selectedRating = 0;
-
+    /* 6. ระบบเปลี่ยนป๊อบอัพ ให้คะแนน -> ขอบคุณ */
     function openRatingModal() {
-      document.getElementById('modal-overlay').style.display = 'none';
-      document.getElementById('rating-modal-overlay').style.display = 'flex';
-      selectedRating = 0;
-      updateStarUI(0);
-      document.getElementById('rating-thanks-msg').innerText = '';
-    }
-
-    function rateStars(starsCount) {
-      selectedRating = starsCount;
-      updateStarUI(starsCount);
-      const msgs = ["ปรับปรุง", "พอใช้", "ปานกลาง", "ดีเยี่ยม!", "มหัศจรรย์มาก! ✨"];
-      document.getElementById('rating-thanks-msg').innerText = `คุณให้คะแนน ${starsCount} ดาว (${msgs[starsCount - 1]})`;
+      document.getElementById('result-modal').style.display = 'none';
+      document.getElementById('rating-modal').style.display = 'flex';
       playMagicSound();
     }
 
-    function updateStarUI(count) {
-      const starBtns = document.querySelectorAll('.star-btn');
-      starBtns.forEach((btn, idx) => {
-        if (idx < count) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
-      });
+    function submitRating(score) {
+      document.getElementById('rating-modal').style.display = 'none';
+      document.getElementById('thank-modal').style.display = 'flex';
+      
+      // ปลดเครื่องหมายติ๊กดาวเดิม
+      const checkedStar = document.querySelector('.star-rating input:checked');
+      if(checkedStar) checkedStar.checked = false;
+
+      playMagicSound();
     }
 
-    function submitRatingAndRestart() {
-      document.getElementById('rating-modal-overlay').style.display = 'none';
-      closePopupAndResume();
+    function finishAndResume() {
+      document.getElementById('thank-modal').style.display = 'none';
+      playMagicSound();
+      startContinuousShuffle();
     }
 
-    /* 6. ระบบตรวจจับมือ */
+    /* 7. ระบบตรวจจับมือ */
     function initTouchMode() {
       isGestureMode = false;
       playMagicSound();

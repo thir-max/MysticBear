@@ -29,7 +29,7 @@
       background: radial-gradient(ellipse at bottom, var(--bg-color-3) 0%, var(--bg-color-2) 50%, var(--bg-color-1) 100%);
       color: #ffffff;
       min-height: 100vh;
-      overflow-x: hidden;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -41,12 +41,13 @@
     .app-container {
       position: relative;
       z-index: 10;
-      width: 100%;
-      max-width: 440px;
-      padding: 16px;
+      width: 100vw;
+      height: 100vh;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       text-align: center;
     }
 
@@ -55,17 +56,19 @@
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(243, 216, 132, 0.2);
       border-radius: 28px;
-      padding: 40px 24px;
+      padding: 40px 28px;
       backdrop-filter: blur(16px);
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
       width: 100%;
+      max-width: 420px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      z-index: 20;
     }
 
     .setup-card h1 {
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 600;
       color: var(--accent-gold);
       margin-bottom: 28px;
@@ -100,13 +103,14 @@
 
     /* น้องหมี */
     .bear-wrapper {
-      position: relative;
-      width: 110px;
-      height: 110px;
-      margin-bottom: 8px;
+      position: absolute;
+      top: 40px;
+      width: 100px;
+      height: 100px;
       display: none;
       justify-content: center;
       align-items: center;
+      z-index: 20;
     }
 
     .bear-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 12px rgba(243, 216, 132, 0.3)); }
@@ -125,6 +129,8 @@
 
     /* Badge สถานะด้านบน */
     .hand-status-badge {
+      position: absolute;
+      top: 15px;
       display: none;
       align-items: center;
       gap: 8px;
@@ -135,47 +141,58 @@
       font-size: 0.85rem;
       font-weight: 500;
       color: #e2d5ff;
-      margin-bottom: 12px;
+      backdrop-filter: blur(8px);
+      z-index: 20;
     }
 
-    /* วนไพ่สุ่มเป็นวงรี (Ellipse Carousel 3D) */
+    /* วงรีสุ่มไพ่หมุนเต็มหน้าจอ (Full-Screen Ellipse 3D) */
     .ellipse-container {
-      position: relative;
-      width: 300px;
-      height: 150px;
-      margin: 10px 0;
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
       display: none;
       justify-content: center;
       align-items: center;
-      perspective: 800px;
+      perspective: 1000px;
+      z-index: 5;
     }
 
     .mini-card {
       position: absolute;
-      width: 55px;
-      height: 90px;
+      width: 75px;
+      height: 120px;
       background: linear-gradient(135deg, #2a1147, #120624);
       border: 1.5px solid var(--accent-gold);
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      border-radius: 10px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.6);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 1.4rem;
       color: var(--accent-gold);
-      transition: transform 0.1s linear;
+      transition: transform 0.05s linear;
     }
 
-    /* การ์ดหลัก */
-    .card-display { display: none; flex-direction: column; align-items: center; width: 100%; }
+    /* การ์ดผลคำทำนายหลัก */
+    .card-display {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 320px;
+      z-index: 15;
+      margin-top: 80px;
+    }
 
     .tarot-card {
-      width: 210px;
-      height: 330px;
-      background: rgba(20, 10, 35, 0.8);
+      width: 220px;
+      height: 340px;
+      background: rgba(20, 10, 35, 0.85);
       border: 1.5px solid var(--accent-gold);
       border-radius: 16px;
-      box-shadow: 0 0 25px rgba(243, 216, 132, 0.25);
+      box-shadow: 0 0 30px rgba(243, 216, 132, 0.3);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -185,11 +202,11 @@
     }
 
     .card-header { font-size: 0.75rem; letter-spacing: 2px; color: #a393c8; font-weight: 600; }
-    .card-title { font-size: 1.2rem; font-weight: 600; color: var(--accent-gold); margin: 6px 0 2px 0; }
+    .card-title { font-size: 1.25rem; font-weight: 600; color: var(--accent-gold); margin: 6px 0 2px 0; }
     .card-title-en { font-size: 0.8rem; color: #9f8ec2; margin-bottom: 8px; }
     .card-keywords { display: flex; wrap: wrap; gap: 4px; justify-content: center; margin-bottom: 8px; }
     .tag { font-size: 0.7rem; font-weight: 500; background: rgba(243, 216, 132, 0.1); border: 1px solid rgba(243, 216, 132, 0.3); color: var(--accent-gold); padding: 2px 6px; border-radius: 8px; }
-    .card-meaning { font-size: 0.85rem; line-height: 1.5; color: #ded5f5; text-align: justify; overflow-y: auto; max-height: 120px; }
+    .card-meaning { font-size: 0.85rem; line-height: 1.5; color: #ded5f5; text-align: justify; overflow-y: auto; max-height: 125px; }
   </style>
 </head>
 <body>
@@ -204,6 +221,11 @@
         <button class="btn btn-primary" onclick="initMagicMode()">ต้องการ</button>
         <button class="btn" onclick="initTouchMode()">ไม่เป็นไร</button>
       </div>
+    </div>
+
+    <div id="hand-status" class="hand-status-badge">
+      <span id="hand-icon">✋</span>
+      <span id="hand-text">กำลังค้นหามือ...</span>
     </div>
 
     <div id="bear-container" class="bear-wrapper">
@@ -232,11 +254,6 @@
       </svg>
     </div>
 
-    <div id="hand-status" class="hand-status-badge">
-      <span id="hand-icon">✋</span>
-      <span id="hand-text">กำลังค้นหามือ...</span>
-    </div>
-
     <div id="ellipse-carousel" class="ellipse-container"></div>
 
     <div id="card-display" class="card-display">
@@ -250,7 +267,7 @@
           </div>
         </div>
         <div class="card-meaning" id="card-meaning">
-          แตะที่ไพ่ หรือกำมือ (✊) เพื่อให้คุณหมีหมุนวนไพ่สุ่มคำทำนายให้คุณ
+          แตะที่ไพ่ หรือกำมือ (✊) ค้างไว้ครู่หนึ่ง เพื่อให้คุณหมีร่ายเวทหมุนสุ่มไพ่ให้คุณ
         </div>
       </div>
 
@@ -283,19 +300,19 @@
     function playCardCarouselSound() {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       const now = audioCtx.currentTime;
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 12; i++) {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(200 + Math.random() * 120, now + i * 0.06);
-        gain.gain.setValueAtTime(0.05, now + i * 0.06);
+        osc.frequency.setValueAtTime(180 + Math.random() * 140, now + i * 0.06);
+        gain.gain.setValueAtTime(0.06, now + i * 0.06);
         gain.gain.linearRampToValueAtTime(0.005, now + i * 0.06 + 0.05);
         osc.connect(gain); gain.connect(audioCtx.destination);
         osc.start(now + i * 0.06); osc.stop(now + i * 0.06 + 0.05);
       }
     }
 
-    /* 2. JSON Tarot Deck */
+    /* 2. ฐานข้อมูลไพ่ Tarot */
     const tarotDeck = [
       { id: "m00", arcana: "Major Arcana", nameEn: "The Fool", nameTh: "ผู้เริ่มต้น", keywords: ["จุดเริ่มต้น", "อิสระ"], meaning: "คุณกำลังยืนอยู่ตรงจุดเริ่มต้นของการเดินทางครั้งใหม่ในชีวิต ปล่อยวางความกลัวและเชื่อมั่นในสัญชาตญาณ" },
       { id: "m01", arcana: "Major Arcana", nameEn: "The Magician", nameTh: "นักมายากล", keywords: ["ศักยภาพ", "ไหวพริบ"], meaning: "ทรัพยากรทุกอย่างพร้อมแล้วในมือคุณ จงมั่นใจและเริ่มแปรเปลี่ยนความฝันให้กลายเป็นความจริง" },
@@ -305,7 +322,7 @@
       { id: "m19", arcana: "Major Arcana", nameEn: "The Sun", nameTh: "ดวงอาทิตย์", keywords: ["ความสำเร็จ", "พลังชีวิต"], meaning: "ไพ่แห่งความโชคดีและความสดใส ทุกสิ่งที่ทำจะได้รับผลตอบแทนงดงาม เต็มไปด้วยพลังบวก" }
     ];
 
-    /* 3. 3D Stars Canvas */
+    /* 3. Background ดวงดาว */
     const canvas = document.getElementById('stars-canvas');
     const ctx = canvas.getContext('2d');
     let stars = [];
@@ -332,9 +349,9 @@
     function animateStars() { ctx.clearRect(0, 0, canvas.width, canvas.height); stars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animateStars); }
     window.addEventListener('resize', resizeCanvas); initStars(); animateStars();
 
-    /* 4. อนิเมชันการวนไพ่สุ่มเป็นวงรี 3D */
+    /* 4. อนิเมชันไพ่หมุนเป็นวงรีเต็มจอ (Full Screen Ellipse) */
     const carousel = document.getElementById('ellipse-carousel');
-    const totalMiniCards = 8;
+    const totalMiniCards = 10;
     let angleOffset = 0;
     let isShuffling = false;
     let isGestureMode = false;
@@ -351,12 +368,15 @@
 
     function updateEllipsePosition() {
       const cards = carousel.children;
-      const rx = 110, ry = 35;
+      // ปรับรัศมีวงรีให้กว้างเต็มหน้าจอ
+      const rx = Math.min(window.innerWidth * 0.4, 380);
+      const ry = Math.min(window.innerHeight * 0.28, 200);
+
       for (let i = 0; i < cards.length; i++) {
         const angle = angleOffset + (i * (2 * Math.PI / cards.length));
         const x = Math.cos(angle) * rx;
         const y = Math.sin(angle) * ry;
-        const scale = 0.6 + (y + ry) / (2 * ry) * 0.4;
+        const scale = 0.65 + (y + ry) / (2 * ry) * 0.45;
         const zIndex = Math.round((y + ry) * 10);
         cards[i].style.transform = `translate3d(${x}px, ${y}px, 0px) scale(${scale})`;
         cards[i].style.zIndex = zIndex;
@@ -380,18 +400,18 @@
       carousel.style.display = 'flex';
 
       if (isGestureMode) {
-        updateBadgeStatus("✊", "คุณหมีกำลังร่ายเวทมนตร์หมุนไพ่...");
+        updateBadgeStatus("✊", "คุณหมีกำลังหมุนสุ่มไพ่เต็มจอ...");
       }
 
       playCardCarouselSound();
 
       let startTime = null;
-      const duration = 1200;
+      const duration = 1400; // เพิ่มเวลาหมุนวงรีให้นุ่มนวล ชัดเจน
 
       function animateCarousel(timestamp) {
         if (!startTime) startTime = timestamp;
         const progress = timestamp - startTime;
-        angleOffset += 0.25;
+        angleOffset += 0.22;
         updateEllipsePosition();
 
         if (progress < duration) {
@@ -401,7 +421,6 @@
           cardDisplay.style.display = 'flex';
           bear.classList.remove('casting');
           
-          // สุ่มข้อมูลไพ่
           const card = tarotDeck[Math.floor(Math.random() * tarotDeck.length)];
           document.getElementById('card-arcana').innerText = card.arcana;
           document.getElementById('card-name-th').innerText = card.nameTh;
@@ -420,7 +439,7 @@
       requestAnimationFrame(animateCarousel);
     }
 
-    /* 5. Mode Handlers */
+    /* 5. ระบบตรวจจับมือและจังหวะอ่านสัญลักษณ์ */
     function initTouchMode() {
       isGestureMode = false;
       playMagicSound();
@@ -430,7 +449,9 @@
       startEllipseShuffle();
     }
 
-    let lastGestureTime = 0;
+    let fistHoldStartTime = 0;
+    let lastShuffleTriggerTime = 0;
+
     function initMagicMode() {
       isGestureMode = true;
       playMagicSound();
@@ -443,7 +464,7 @@
 
       const videoElement = document.getElementById('webcam');
       const hands = new Hands({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}` });
-      hands.setOptions({ maxNumHands: 1, modelComplexity: 1, minDetectionConfidence: 0.6, minTrackingConfidence: 0.6 });
+      hands.setOptions({ maxNumHands: 1, modelComplexity: 1, minDetectionConfidence: 0.65, minTrackingConfidence: 0.65 });
       hands.onResults(onHandResults);
 
       const camera = new Camera(videoElement, {
@@ -463,19 +484,30 @@
 
       if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
         const landmarks = results.multiHandLandmarks[0];
+        
+        // คำนวณระยะห่างเพื่อแยกแยะแบมือ (✋) และกำมือ (✊)
         const distance = Math.hypot(landmarks[8].x - landmarks[0].x, landmarks[8].y - landmarks[0].y);
         const now = Date.now();
 
-        if (distance < 0.25) { // ท่ากำมือ ✊
-          if (now - lastGestureTime > 2000) {
-            lastGestureTime = now;
+        if (distance < 0.25) { 
+          // กำมือ (✊) -> ต้องกำค้างไว้ 400ms เพื่อยืนยันคำสั่ง
+          if (fistHoldStartTime === 0) {
+            fistHoldStartTime = now;
+          } else if (now - fistHoldStartTime > 400 && now - lastShuffleTriggerTime > 2500) {
+            updateBadgeStatus("✊", "ตรวจพบการกำมือ! กำลังร่ายเวท...");
+            lastShuffleTriggerTime = now;
+            fistHoldStartTime = 0;
             startEllipseShuffle();
           }
-        } else { // ท่าแบมือ ✋
+        } else {
+          // แบมือ (✋) -> รีเซ็ตเวลากำมือ
+          fistHoldStartTime = 0;
           updateBadgeStatus("✋", "พร้อมร่ายเวท (กำมือเพื่อหมุนสุ่มไพ่)");
         }
       } else {
-        updateBadgeStatus("✨", "กำลังค้นหามือ...");
+        // เอามือลง หรือไม่มีมือโชว์ -> อยู่เฉยๆ ไม่ต้องทำอะไร
+        fistHoldStartTime = 0;
+        updateBadgeStatus("✨", "พร้อมร่ายเวท (ยกมือขึ้นเพื่อควบคุม)");
       }
     }
   </script>

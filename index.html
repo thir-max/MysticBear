@@ -13,23 +13,17 @@
   --ink-deep:#150c2e;
   --ink-mid:#241546;
   --violet:#6b3fa0;
-  --violet-soft:#8a5fc2;
   --gold:#c9a54d;
   --gold-bright:#e8c877;
   --parchment:#f0e6d8;
   --text-soft:#cdc0e8;
   --cups:#2e7d6b;
-  --cups-glow:#4fb89e;
   --wands:#c1531b;
-  --wands-glow:#e8823f;
   --swords:#5c7a99;
-  --swords-glow:#8fb3d1;
   --pentacles:#7a8f3a;
-  --pentacles-glow:#a8c25c;
   --major:#8a5fc2;
-  --major-glow:#c9a5f0;
   --h1: 44px;
-  --h2: 28px;
+  --h2: 26px;
   --h3: 18px;
   --body: 16px;
   --small: 13px;
@@ -60,13 +54,13 @@ body{ position:relative; }
 .wrap{
   position:relative; z-index:1;
   max-width:1000px; margin:0 auto;
-  padding:40px 20px 80px;
+  padding:30px 20px 80px;
   display:flex; flex-direction:column; align-items:center;
   text-align:center;
 }
 .eyebrow-line{
   width:64px; height:1px; background:linear-gradient(90deg, transparent, var(--gold), transparent);
-  margin:0 auto 16px;
+  margin:0 auto 12px;
 }
 h1.title{
   font-family:'Cinzel Decorative', serif;
@@ -77,19 +71,19 @@ h1.title{
   text-shadow:0 0 30px rgba(201,165,77,.35);
   line-height:1.15;
 }
-.title-th{ font-family:'Charmonman', cursive; font-size:26px; color:var(--text-soft); margin-top:4px; }
+.title-th{ font-family:'Charmonman', cursive; font-size:24px; color:var(--text-soft); margin-top:2px; }
 .subtitle{
   font-family:'Taviraj', serif; font-weight:300; font-size:var(--body);
-  color:var(--text-soft); max-width:520px; margin:16px auto 0; line-height:1.7;
+  color:var(--text-soft); max-width:520px; margin:12px auto 0; line-height:1.6;
 }
 
-/* ---------- เวทีและกองไพ่ ---------- */
+/* เวทีแสดงผลวงรี */
 .stage{
-  position:relative; width:100%; height:460px; margin-top:30px;
+  position:relative; width:100%; height:380px; margin-top:20px;
   display:flex; align-items:center; justify-content:center;
 }
 .deck-glow{
-  position:absolute; width:280px; height:280px; border-radius:50%;
+  position:absolute; width:260px; height:260px; border-radius:50%;
   background:radial-gradient(circle, rgba(201,165,77,.2), transparent 70%);
   filter:blur(8px); animation:pulse-glow 3.5s ease-in-out infinite;
 }
@@ -97,11 +91,13 @@ h1.title{
   0%,100%{opacity:.5; transform:scale(1);}
   50%{opacity:.9; transform:scale(1.15);}
 }
-.ring-container{
-  position:relative; width:100%; height:100%;
-  display:flex; align-items:center; justify-content:center;
+.ring-container{ position:relative; width:100%; height:100%; }
+
+.deck{
+  position:absolute; top:50%; left:50%; width:100px; height:155px;
+  transform:translate(-50%, -50%);
+  cursor:pointer; z-index:2; transition:opacity 0.4s ease;
 }
-.deck{ position:relative; width:100px; height:155px; cursor:pointer; z-index:2; transition:opacity 0.4s ease; }
 .deck-card{
   position:absolute; inset:0; border-radius:9px;
   background:
@@ -117,32 +113,33 @@ h1.title{
 }
 .deck-card .sigil{ width:36px; height:36px; opacity:.85; color:var(--gold); }
 .deck-hint{
-  position:absolute; bottom:-40px; left:50%; transform:translateX(-50%);
+  position:absolute; bottom:-35px; left:50%; transform:translateX(-50%);
   white-space:nowrap; font-family:'Taviraj', serif; font-size:var(--small);
-  letter-spacing:.04em; color:var(--text-soft); opacity:.9;
+  color:var(--text-soft); opacity:.9;
 }
 
-/* ---------- ไพ่กระจายวงรี (ตัวไพ่ไม่หมุน ไม่ซ้อนกัน) ---------- */
+/* ไพ่วงรีแนวนอนกระจายตัว */
 .ring-card{
-  position:absolute; width:75px; height:115px; border-radius:7px;
+  position:absolute; top:50%; left:50%;
+  width:70px; height:110px; border-radius:7px;
   background:
     linear-gradient(135deg, var(--ink-mid), var(--ink-deep) 60%),
     repeating-linear-gradient(45deg, rgba(201,165,77,.06) 0 2px, transparent 2px 14px);
   border:1.2px solid var(--gold);
-  box-shadow:0 6px 14px rgba(0,0,0,.6);
+  box-shadow:0 4px 12px rgba(0,0,0,.7);
   display:flex; align-items:center; justify-content:center;
-  pointer-events:none; transition:opacity 0.4s ease;
+  pointer-events:none; transition:opacity 0.3s ease;
   will-change:transform; opacity:0;
 }
 .ring-card::before{
-  content:''; position:absolute; inset:5px;
+  content:''; position:absolute; inset:4px;
   border:1px solid rgba(201,165,77,.4); border-radius:4px;
 }
-.ring-card .sigil{ width:24px; height:24px; color:var(--gold); opacity:.75;}
+.ring-card .sigil{ width:22px; height:22px; color:var(--gold); opacity:.75;}
 
-/* ---------- แผงควบคุมกล้อง / ปุ่มกด ---------- */
+/* ปุ่มและแผงควบคุม */
 .gesture-panel{
-  position:fixed; right:20px; bottom:20px; z-index:20; width:170px;
+  position:fixed; right:20px; bottom:20px; z-index:20; width:160px;
   background:rgba(10,6,24,.88); border:1px solid rgba(201,165,77,.4);
   border-radius:12px; padding:10px; backdrop-filter:blur(6px);
   box-shadow:0 10px 30px rgba(0,0,0,.6);
@@ -166,7 +163,7 @@ h1.title{
 }
 .action-btn:hover{ border-color:var(--gold); color:var(--gold-bright); }
 
-/* ---------- Popup ผลการทำนาย ---------- */
+/* Popup แสดงคำทำนายเชิงลึกยาวๆ */
 .overlay{
   position:fixed; inset:0; z-index:50; background:rgba(5,3,14,.85);
   backdrop-filter:blur(5px); display:flex; align-items:center; justify-content:center;
@@ -176,25 +173,24 @@ h1.title{
 .card-popup{
   width:100%; max-width:540px; max-height:88vh; overflow-y:auto;
   background:linear-gradient(165deg, var(--ink-mid), var(--ink-deep));
-  border:1px solid var(--gold); border-radius:16px;
-  box-shadow:0 30px 80px rgba(0,0,0,.7), 0 0 60px rgba(201,165,77,.15);
-  padding:32px 28px 28px; position:relative;
+  border:1.5px solid var(--gold); border-radius:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,.8), 0 0 40px rgba(201,165,77,.2);
+  padding:30px 24px 24px; position:relative;
   transform:scale(.9) translateY(20px); transition:transform .4s cubic-bezier(.2,.9,.25,1.1);
 }
 .overlay.show .card-popup{ transform:scale(1) translateY(0); }
 .popup-close{
   position:absolute; top:14px; right:16px; background:none; border:none;
   color:var(--text-soft); font-size:24px; cursor:pointer; line-height:1;
-  font-family:'EB Garamond',serif;
 }
 .popup-close:hover{ color:var(--gold-bright); }
 .popup-icon-wrap{
-  width:72px; height:72px; margin:0 auto 16px; border-radius:50%;
+  width:68px; height:68px; margin:0 auto 14px; border-radius:50%;
   display:flex; align-items:center; justify-content:center;
   border:1px solid var(--suit-color, var(--gold));
-  box-shadow:0 0 24px var(--suit-glow, rgba(201,165,77,.4));
+  box-shadow:0 0 20px var(--suit-color, rgba(201,165,77,.4));
 }
-.popup-icon-wrap svg{ width:36px; height:36px; color:var(--suit-color, var(--gold)); }
+.popup-icon-wrap svg{ width:34px; height:34px; color:var(--suit-color, var(--gold)); }
 .popup-arcana-tag{
   font-family:'Taviraj', serif; font-size:var(--small); letter-spacing:.08em;
   color:var(--suit-color, var(--gold)); text-align:center; margin-bottom:4px;
@@ -205,35 +201,32 @@ h1.title{
 }
 .popup-name-th{ font-family:'Charmonman', cursive; font-size:22px; text-align:center; color:var(--parchment); margin-top:2px; }
 .popup-divider{
-  width:40px; height:1px; margin:16px auto;
+  width:40px; height:1px; margin:14px auto;
   background:linear-gradient(90deg, transparent, var(--suit-color, var(--gold)), transparent);
 }
-.popup-keywords{ display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-bottom:18px; }
+.popup-keywords{ display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-bottom:16px; }
 .popup-keywords span{
   font-family:'Taviraj', serif; font-size:var(--small);
   border:1px solid rgba(205,192,232,.3); color:var(--text-soft);
-  padding:3px 10px; border-radius:16px;
+  padding:2px 10px; border-radius:14px;
 }
-.popup-section-title{ font-family:'Cinzel', serif; font-size:var(--h3); color:var(--gold-bright); letter-spacing:.02em; margin-bottom:6px; }
-.popup-meaning{ font-family:'Taviraj', serif; font-weight:300; font-size:var(--body); color:var(--parchment); line-height:1.8; margin-bottom:20px; text-align:justify; }
-.popup-actions{ display:flex; gap:10px; justify-content:center; margin-top:6px; }
+.popup-section-title{ font-family:'Cinzel', serif; font-size:var(--h3); color:var(--gold-bright); margin-bottom:8px; text-align:center; }
+.popup-meaning{ font-family:'Taviraj', serif; font-weight:300; font-size:var(--body); color:var(--parchment); line-height:1.8; margin-bottom:20px; text-align:justify; white-space:pre-line; }
+.popup-actions{ display:flex; gap:10px; justify-content:center; }
 .popup-actions button{
-  font-family:'Cinzel', serif; font-size:13px; letter-spacing:.03em;
-  padding:10px 20px; border-radius:8px; cursor:pointer;
+  font-family:'Cinzel', serif; font-size:13px;
+  padding:9px 18px; border-radius:8px; cursor:pointer;
   background:transparent; color:var(--gold-bright); border:1px solid var(--gold);
-  transition:background .25s ease, color .25s ease;
 }
 .popup-actions button:hover{ background:var(--gold); color:var(--ink-void); }
 .popup-actions button.secondary{ border-color:rgba(205,192,232,.35); color:var(--text-soft); }
-.popup-actions button.secondary:hover{ background:rgba(205,192,232,.12); color:var(--parchment); }
 
-footer.credit{ margin-top:40px; font-family:'Taviraj', serif; font-size:12px; color:rgba(205,192,232,.45); }
+footer.credit{ margin-top:30px; font-family:'Taviraj', serif; font-size:12px; color:rgba(205,192,232,.45); }
 
 @media (max-width:600px){
-  :root{ --h1:32px; --h2:22px; --h3:16px; --body:14px; }
-  .stage{ height:380px; }
-  .gesture-panel{ width:135px; right:10px; bottom:10px; }
-  .card-popup{ padding:24px 18px 20px; }
+  :root{ --h1:32px; --h2:22px; --body:14px; }
+  .stage{ height:320px; }
+  .gesture-panel{ width:130px; right:10px; bottom:10px; }
 }
 </style>
 </head>
@@ -245,7 +238,7 @@ footer.credit{ margin-top:40px; font-family:'Taviraj', serif; font-size:12px; co
   <h1 class="title">ARCANUM</h1>
   <div class="title-th">ไพ่ยิปซี 78 ใบ</div>
   <p class="subtitle">
-    ✋ <b>กางมือ</b> เพื่อเริ่มสุ่มวนกองไพ่ / ✊ <b>กำมือ</b> เพื่อหยุดและเปิดคำทำนาย<br>
+    ✋ <b>กางมือ</b> เพื่อเริ่มสุ่มวนกองไพ่เป็นวงรี / ✊ <b>กำมือ</b> เพื่อหยุดและเปิดคำทำนาย<br>
     (หรือคลิกที่กองไพ่ / ใช้ปุ่มควบคุมมุมขวาล่างได้)
   </p>
 
@@ -281,7 +274,7 @@ footer.credit{ margin-top:40px; font-family:'Taviraj', serif; font-size:12px; co
     <div class="popup-name-th" id="popupNameTh"></div>
     <div class="popup-divider"></div>
     <div class="popup-keywords" id="popupKeywords"></div>
-    <div class="popup-section-title">คำทำนายและความหมาย</div>
+    <div class="popup-section-title">คำทำนายและความหมายเชิงลึก</div>
     <div class="popup-meaning" id="popupMeaning"></div>
     <div class="popup-actions">
       <button class="secondary" id="closeBtn">ปิด</button>
@@ -291,92 +284,37 @@ footer.credit{ margin-top:40px; font-family:'Taviraj', serif; font-size:12px; co
 </div>
 
 <script>
-/* ================= ICONS & DATA (78 Cards) ================= */
+/* ================= สัญลักษณ์ SVG ================= */
 const ICONS = {
   chalice: '<path d="M14 8h20l-2 14a8 8 0 0 1-16 0L14 8Z"/><path d="M24 30v9"/><path d="M16 39h16"/>',
   sword: '<path d="M24 4v30"/><path d="M15 12h18"/><path d="M20 34l4 6 4-6"/><circle cx="24" cy="38" r="2.2"/>',
   wand: '<path d="M14 38 34 10"/><path d="M30 6l2 4 4 2-4 2-2 4-2-4-4-2 4-2Z"/>',
   coin: '<circle cx="24" cy="24" r="16"/><path d="M24 12l4.5 9.4L38 23l-7 6.8L32.6 40 24 34.8 15.4 40 17 29.8 10 23l9.5-1.6L24 12Z"/>',
   star: '<path d="M24 6l4.9 12.6L42 20l-10 8.4L35.3 42 24 34.6 12.7 42 16 28.4 6 20l13.1-1.4L24 6Z"/>',
-  moon: '<path d="M30 6a17 17 0 1 0 12 12A13 13 0 0 1 30 6Z"/>',
-  sun: '<circle cx="24" cy="24" r="9"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9 9l4.2 4.2M34.8 34.8 39 39M39 9l-4.2 4.2M13.2 34.8 9 39"/>',
   feather: '<path d="M34 6C18 10 12 26 10 42c14-2 26-10 28-24"/><path d="M14 38 32 10"/>',
   infinity: '<path d="M15 24a7 7 0 1 1 0-.1M33 24a7 7 0 1 0 0-.1M15 24c4-8 14-8 18 0M15 24c4 8 14 8 18 0" fill="none"/>',
-  crown: '<path d="M8 34 6 16l9 8 9-14 9 14 9-8-2 18Z"/><path d="M8 34h32"/>',
-  key: '<circle cx="14" cy="14" r="7"/><path d="M19 19 38 38"/><path d="M32 32l4-4M36 36l4-4"/>',
-  heart: '<path d="M24 40C10 30 4 22 4 14.5 4 8.7 8.6 4 14.3 4 18.7 4 22 6.6 24 10c2-3.4 5.3-6 9.7-6C39.4 4 44 8.7 44 14.5 44 22 38 30 24 40Z"/>',
-  wheel: '<circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="4"/><path d="M24 8v8M24 32v8M8 24h8M32 24h8M12.7 12.7l5.6 5.6M29.7 29.7l5.6 5.6M35.3 12.7l-5.6 5.6M18.3 29.7l-5.6 5.6"/>',
-  lion: '<circle cx="24" cy="24" r="8"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9 9l4.2 4.2M34.8 34.8 39 39M39 9l-4.2 4.2M13.2 34.8 9 39M16 6l3 6M32 6l-3 6M16 42l3-6M32 42l-3-6M6 16l6 3M42 16l-6 3M6 32l6-3M42 32l-6-3"/>',
-  lantern: '<path d="M18 10h12M20 6h8"/><rect x="14" y="10" width="20" height="24" rx="3"/><path d="M20 34v6M28 34v6M14 18h20M14 26h20"/>',
-  scale: '<path d="M24 6v34M12 12h24"/><path d="M12 12 6 24a6 6 0 0 0 12 0Z"/><path d="M36 12l-6 12a6 6 0 0 0 12 0Z"/><path d="M17 40h14"/>',
-  spiral: '<path d="M24 24c0-5 4-8 8-6s5 8 1 11-11 1-13-5 2-14 10-15 16 5 14 15-13 16-21 11" fill="none"/>',
-  skull: '<path d="M24 6c-9 0-15 6-15 14 0 6 3 9 5 12v6h20v-6c2-3 5-6 5-12 0-8-6-14-15-14Z"/><circle cx="18" cy="20" r="2.5"/><circle cx="30" cy="20" r="2.5"/><path d="M20 38v4M28 38v4"/>',
-  chain: '<ellipse cx="18" cy="18" rx="8" ry="6" transform="rotate(-30 18 18)"/><ellipse cx="30" cy="30" rx="8" ry="6" transform="rotate(-30 30 30)"/>',
-  tower: '<path d="M16 44V16l8-10 8 10v28Z"/><path d="M16 44h16M20 24l3 4-3 4 3 4M12 10l4 4M36 10l-4 4"/>',
-  trumpet: '<path d="M8 20 30 12v16L8 20Z"/><circle cx="36" cy="20" r="6"/><path d="M30 16h4M30 24h4"/>',
-  wreath: '<path d="M24 6a18 18 0 0 0-9 33.6M24 6a18 18 0 0 1 9 33.6" fill="none"/><path d="M12 34l3 5 5-1M36 34l-3 5-5-1"/>',
-  eye: '<path d="M4 24s7-12 20-12 20 12 20 12-7 12-20 12S4 24 4 24Z"/><circle cx="24" cy="24" r="6"/>',
 };
-function iconSvg(name, extra){
+
+function iconSvg(name){
   const inner = ICONS[name] || ICONS.star;
-  return `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" ${extra||''}>${inner}</svg>`;
+  return `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
 }
 
 const SUITS = {
-  cups:      {th:'ถ้วย',   icon:'chalice', color:'var(--cups)',      glow:'rgba(79,184,158,.45)'},
-  wands:     {th:'คทา',    icon:'wand',    color:'var(--wands)',     glow:'rgba(232,130,63,.45)'},
-  swords:    {th:'ดาบ',    icon:'sword',   color:'var(--swords)',    glow:'rgba(143,179,209,.45)'},
-  pentacles: {th:'เหรียญ', icon:'coin',    color:'var(--pentacles)', glow:'rgba(168,194,92,.45)'},
+  cups:      {th:'ถ้วย',   color:'var(--cups)'},
+  wands:     {th:'คทา',    color:'var(--wands)'},
+  swords:    {th:'ดาบ',    color:'var(--swords)'},
+  pentacles: {th:'เหรียญ', color:'var(--pentacles)'},
 };
 
-const MAJOR = [
-["The Fool","คนโง่","feather",["จุดเริ่มต้น","อิสระ","ความไว้วางใจ"],"คุณกำลังยืนอยู่ตรงจุดเริ่มต้นของการเดินทางใหม่ ไพ่ใบนี้ชวนให้ก้าวออกไปด้วยหัวใจที่เปิดกว้างและเชื่อมั่นในจังหวะชีวิต"],
-["The Magician","นักมายากล","infinity",["พลังสร้างสรรค์","ศักยภาพ","การลงมือทำ"],"ทุกสิ่งที่คุณต้องการอยู่ในมือคุณแล้ว ถึงเวลาแปลงความคิดให้เป็นการกระทำ ใช้ทักษะและไหวพริบที่มีเนรมิตเป้าหมายให้เป็นจริง"],
-["The High Priestess","นักบวชหญิง","moon",["สัญชาตญาณ","ความลึกลับ","ปัญญาภายใน"],"คำตอบที่แท้จริงซ่อนอยู่ในความเงียบ ฟังเสียงสัญชาตญาณของตนเองมากกว่าเหตุผลภายนอก และให้เวลากับการใคร่ครวญ"],
-["The Empress","จักรพรรดินี","wreath",["ความอุดมสมบูรณ์","ความรัก","การเติบโต"],"ช่วงเวลาแห่งความอุดมสมบูรณ์และการเติบโตกำลังมาถึง สื่อถึงความรัก ความอบอุ่น และผลลัพธ์ที่งอกงาม"],
-["The Emperor","จักรพรรดิ","crown",["โครงสร้าง","อำนาจ","ความมั่นคง"],"ถึงเวลาสร้างระเบียบและความมั่นคงให้กับสิ่งที่ทำ แทนความเป็นผู้นำ วินัย และการตัดสินใจอย่างมีเหตุผล"],
-["The Hierophant","นักบวช","key",["ประเพณี","การเรียนรู้","คำแนะนำ"],"คำแนะนำจากผู้มีประสบการณ์หรือแนวทางที่ผ่านการพิสูจน์แล้วจะเป็นประโยชน์ เคารพระบบ ขนบธรรมเนียม หรือครูผู้ชี้แนะ"],
-["The Lovers","คู่รัก","heart",["ความสัมพันธ์","ทางเลือก","ความสอดคล้อง"],"พูดถึงความสัมพันธ์ที่ลึกซึ้งและการเลือกที่มาจากใจจริง สิ่งสำคัญคือความสอดคล้องระหว่างสิ่งที่คุณเชื่อกับสิ่งที่คุณเลือก"],
-["The Chariot","รถศึก","wheel",["ความมุ่งมั่น","ชัยชนะ","การควบคุม"],"ด้วยความมุ่งมั่นและการควบคุมทิศทางที่ชัดเจน คุณสามารถฝ่าฟันอุปสรรคไปสู่ชัยชนะได้"],
-["Strength","พลัง","lion",["ความกล้าหาญ","ความอ่อนโยน","การควบคุมตน"],"พลังที่แท้จริงมาจากความอ่อนโยนและความอดทนที่มั่นคง คุณสามารถเอาชนะสิ่งที่ยากลำบากได้ด้วยใจที่สงบ"],
-["The Hermit","ฤๅษี","lantern",["การใคร่ครวญ","ความสันโดษ","ปัญญา"],"ถอยออกมาจากความวุ่นวายเพื่อฟังเสียงภายในตัวเอง ใช้เวลาอยู่กับตัวเองเพื่อค้นหาคำตอบที่แท้จริง"],
-["Wheel of Fortune","กงล้อแห่งโชคชะตา","spiral",["จังหวะชีวิต","การเปลี่ยนแปลง","โชคชะตา"],"วัฏจักรของชีวิตกำลังหมุนเปลี่ยน ยอมรับการเปลี่ยนแปลงและมองเห็นโอกาสที่แฝงอยู่ในจังหวะใหม่"],
-["Justice","ความยุติธรรม","scale",["ความสมดุล","ความจริง","ผลของการกระทำ"],"ทุกการกระทำล้วนมีผลตามมา แทนความเป็นธรรม การตัดสินใจอย่างซื่อตรง และมองสถานการณ์ตามความเป็นจริง"],
-["The Hanged Man","ชายแขวนกลับหัว","eye",["การหยุดพัก","มุมมองใหม่","การปล่อยวาง"],"การหยุดนิ่งและมองสถานการณ์จากมุมที่ต่างออกไป ให้คำตอบมากกว่าการเร่งรีบ ปล่อยวางความควบคุมชั่วคราว"],
-["Death","ความตาย","skull",["การสิ้นสุด","การเปลี่ยนผ่าน","การเริ่มต้นใหม่"],"การสิ้นสุดของบางสิ่งเป็นเงื่อนไขของการเริ่มต้นใหม่เสมอ ปล่อยวางสิ่งที่หมดประโยชน์เพื่อเปิดทางให้สิ่งใหม่"],
-["Temperance","ความรู้จักประมาณ","chalice",["ความสมดุล","ความอดทน","การผสมผสาน"],"การผสมผสานสิ่งที่แตกต่างกันอย่างพอดีจะนำไปสู่ความกลมกลืน ใจเย็น ค่อยเป็นค่อยไป และหาจุดสมดุล"],
-["The Devil","มาร","chain",["พันธนาการ","ความยึดติด","สัญชาตญาณดิบ"],"สิ่งที่ผูกมัดเราไว้อาจเป็นความกลัวและความยึดติดของตัวเอง ตั้งคำถามว่าโซ่ตรวนนั้นแท้จริงแล้วปลดออกได้หรือไม่"],
-["The Tower","หอคอย","tower",["การเปลี่ยนแปลงฉับพลัน","การพังทลาย","การตื่นรู้"],"โครงสร้างที่ไม่มั่นคงกำลังจะพังทลายลง การเปลี่ยนแปลงนี้เปิดทางให้สร้างสิ่งใหม่ที่แข็งแรงกว่าเดิม"],
-["The Star","ดวงดาว","star",["ความหวัง","การเยียวยา","แรงบันดาลใจ"],"หลังพายุผ่านพ้นไป แสงแห่งความหวังกำลังส่องทาง แทนการเยียวยา ความเชื่อมั่น และแรงบันดาลใจที่กลับคืนมา"],
-["The Moon","ดวงจันทร์","moon",["ความไม่ชัดเจน","จิตใต้สำนึก","ความกลัว"],"ระวังภาพลวงตาและความกลัวที่มาจากจิตใต้สำนึก เชื่อในสัญชาตญาณเมื่อเหตุผลยังมองไม่เห็นทาง"],
-["The Sun","ดวงอาทิตย์","sun",["ความสำเร็จ","ความสุข","ความชัดเจน"],"แสงแดดแห่งความสำเร็จและความสุขกำลังส่องถึงคุณ สื่อถึงความชัดเจน พลังชีวิต และผลลัพธ์ที่น่ายินดี"],
-["Judgement","การพิพากษา","trumpet",["การตื่นรู้","การให้อภัย","จุดเปลี่ยน"],"เสียงเรียกจากภายในกำลังปลุกให้คุณตื่นรู้ ให้อภัยตัวเองและก้าวข้ามไปสู่บทใหม่ด้วยความเข้าใจ"],
-["The World","โลก","coin",["ความสำเร็จสมบูรณ์","การครบวงจร","ความสมบูรณ์"],"การเดินทางอันยาวนานมาถึงจุดที่สมบูรณ์แล้ว แทนความสำเร็จ ความภาคภูมิใจ และพร้อมสู่วัฏจักรใหม่"]
-].map((c,i)=>({arcana:'major', num:i, nameEn:c[0], nameTh:c[1], icon:c[2], keywords:c[3], meaning:c[4], suit:null}));
+/* ================= ดึงข้อมูลไพ่จากไฟล์ JSON 외부 ================= */
+let ALL_CARDS = [];
+fetch('cards-data.json')
+  .then(res => res.json())
+  .then(data => { ALL_CARDS = data; })
+  .catch(err => console.error("ไม่สามารถโหลดไฟล์ข้อมูลไพ่ได้:", err));
 
-const MINOR_TITLES = ['Ace','2','3','4','5','6','7','8','9','10','Page','Knight','Queen','King'];
-const MINOR_TH = ['เอซ','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า','สิบ','เพจ','อัศวิน','ราชินี','ราชา'];
-
-function buildSuit(suitKey){
-  return MINOR_TITLES.map((title, i)=>({
-    arcana:'minor', suit:suitKey, num:i+1,
-    nameEn:`${title} of ${suitKey.charAt(0).toUpperCase()+suitKey.slice(1)}`,
-    nameTh:`${MINOR_TH[i]}${SUITS[suitKey].th}`,
-    icon:SUITS[suitKey].icon,
-    keywords:[`พลังแห่ง${SUITS[suitKey].th}`,'โอกาสใหม่','การเติบโต'],
-    meaning:`ไพ่ใบนี้สื่อถึงพลังงานของตระกูล${SUITS[suitKey].th} สะท้อนถึงสภาวะอารมณ์ การกระทำ และสถานการณ์ที่คุณกำลังเผชิญหน้าอยู่ในขณะนี้`
-  }));
-}
-
-const ALL_CARDS = [
-  ...MAJOR,
-  ...buildSuit('cups'),
-  ...buildSuit('wands'),
-  ...buildSuit('swords'),
-  ...buildSuit('pentacles')
-];
-
-/* ================= BACKGROUND STARS ================= */
+/* ================= ดาวหลังฉาก ================= */
 (function initStars(){
   const field = document.getElementById('starField');
   let html = '';
@@ -389,25 +327,23 @@ const ALL_CARDS = [
   field.innerHTML = html;
 })();
 
-/* ================= DECK & HORIZONTAL ELLIPSE SPREAD ================= */
+/* ================= การวนไพ่วงรีแนวนอน ================= */
 const deckEl = document.getElementById('deck');
 const ringContainer = document.getElementById('ringContainer');
-const RING_COUNT = 24; // จำนวนไพ่ในวงรี
+const RING_COUNT = 24;
 let ringCardEls = [];
 let isSpinning = false;
 let rotationAngle = 0;
 let animationFrameId = null;
 
-// สร้างกองไพ่ตรงกลาง
 for(let i=0; i<5; i++){
   const d = document.createElement('div');
   d.className = 'deck-card';
   d.style.transform = `translate(${-i*0.5}px, ${-i*1.2}px)`;
-  if(i===4) d.innerHTML = `<span class="sigil">${iconSvg('star')}</span><div class="deck-hint">แตะกองไพ่เพื่อสุ่ม</div>`;
+  if(i===4) d.innerHTML = `<span class="sigil">${iconSvg('star')}</span><div class="deck-hint">แตะเพื่อสุ่มไพ่</div>`;
   deckEl.appendChild(d);
 }
 
-// สร้างไพ่วงรี (เตรียมไว้)
 function createRingCards(){
   ringCardEls.forEach(el => el.remove());
   ringCardEls = [];
@@ -421,21 +357,16 @@ function createRingCards(){
 }
 createRingCards();
 
-// ปรับตำแหน่งไพ่เป็นวงรีแนวนอน (Horizontal Ellipse) โดยไม่ซ้อนกัน
 function updateRingPositions(){
   const isMobile = window.innerWidth < 600;
-  // รัศมีแกน X (แนวนอน) กว้างกว่ารัศมีแกน Y (แนวตั้ง) เพื่อให้เป็นวงรีแนวนอน
-  const radiusX = isMobile ? window.innerWidth * 0.38 : 360; 
-  const radiusY = isMobile ? 100 : 130;
+  const radiusX = isMobile ? window.innerWidth * 0.4 : 380;
+  const radiusY = isMobile ? 65 : 90;
 
   ringCardEls.forEach((card, i) => {
-    // กระจายมุมเป็น 360 องศาเท่าๆ กัน ป้องกันการซ้อนทับกัน
     const angleRad = ((i / RING_COUNT) * 360 + rotationAngle) * (Math.PI / 180);
     const x = Math.cos(angleRad) * radiusX;
     const y = Math.sin(angleRad) * radiusY;
-    
-    // กำหนดตำแหน่ง translate โดยไม่หมุนตัวไพ่ (ไม่มี rotate)
-    card.style.transform = `translate(${x}px, ${y}px)`;
+    card.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
   });
 }
 
@@ -443,12 +374,11 @@ function startSpread(){
   if(isSpinning) return;
   isSpinning = true;
   deckEl.style.opacity = '0';
-  
   ringCardEls.forEach(card => card.style.opacity = '1');
 
   function spinLoop(){
     if(!isSpinning) return;
-    rotationAngle = (rotationAngle + 0.6) % 360; // ความเร็วการหมุนวน
+    rotationAngle = (rotationAngle + 0.7) % 360;
     updateRingPositions();
     animationFrameId = requestAnimationFrame(spinLoop);
   }
@@ -460,15 +390,18 @@ function stopSpreadAndPick(){
   isSpinning = false;
   if(animationFrameId) cancelAnimationFrame(animationFrameId);
 
-  // สุ่มไพ่ 1 ใบจาก 78 ใบ
-  const card = ALL_CARDS[Math.floor(Math.random() * ALL_CARDS.length)];
+  if(ALL_CARDS.length === 0){
+    alert("กำลังโหลดข้อมูลไพ่ กรุณาลองใหม่อีกครั้ง");
+    return;
+  }
+
+  const cardPicked = ALL_CARDS[Math.floor(Math.random() * ALL_CARDS.length)];
   
-  // ซ่อนไพ่วงรี แล้วกลับสู่กองไพ่เดิม พร้อมเปิด Popup
   ringCardEls.forEach(el => el.style.opacity = '0');
   setTimeout(() => {
     deckEl.style.opacity = '1';
-    openPopup(card);
-  }, 350);
+    openPopup(cardPicked);
+  }, 300);
 }
 
 deckEl.addEventListener('click', () => {
@@ -479,25 +412,22 @@ deckEl.addEventListener('click', () => {
 document.getElementById('startClickBtn').addEventListener('click', startSpread);
 document.getElementById('stopClickBtn').addEventListener('click', stopSpreadAndPick);
 
-/* ================= POPUP SYSTEM (แสดงชื่อและคำทำนาย) ================= */
+/* ================= POPUP แสดงผลคำทำนาย ================= */
 const overlay = document.getElementById('overlay');
 function openPopup(card){
   const isMajor = card.arcana === 'major';
-  const suitInfo = isMajor ? {color:'var(--major)', glow:'rgba(201,165,240,.45)'} : SUITS[card.suit];
+  const suitInfo = isMajor ? {color:'var(--major)'} : (SUITS[card.suit] || {color:'var(--gold)'});
   
   document.documentElement.style.setProperty('--suit-color', suitInfo.color);
   document.getElementById('popupIconWrap').style.setProperty('--suit-color', suitInfo.color);
-  document.getElementById('popupIconWrap').style.setProperty('--suit-glow', suitInfo.glow);
   document.getElementById('popupIconWrap').innerHTML = iconSvg(card.icon);
   
-  document.getElementById('popupTag').textContent = isMajor ? `Major Arcana · ไพ่ชุดใหญ่ (${card.num})` : `${card.suit.toUpperCase()} · ชุด${SUITS[card.suit].th}`;
+  document.getElementById('popupTag').textContent = isMajor ? `Major Arcana · ไพ่ชุดใหญ่` : `Minor Arcana · ตระกูล${SUITS[card.suit] ? SUITS[card.suit].th : ''}`;
   document.getElementById('popupTag').style.color = suitInfo.color;
   
-  // ชื่อไพ่ ภาษาอังกฤษ และ ภาษาไทย
   document.getElementById('popupNameEn').textContent = card.nameEn;
   document.getElementById('popupNameTh').textContent = card.nameTh;
   
-  // แสดง Keywords และ ความหมาย/คำทำนาย
   document.getElementById('popupKeywords').innerHTML = card.keywords.map(k=>`<span>${k}</span>`).join('');
   document.getElementById('popupMeaning').textContent = card.meaning;
   
@@ -509,11 +439,11 @@ document.getElementById('popupClose').addEventListener('click', closePopup);
 document.getElementById('closeBtn').addEventListener('click', closePopup);
 document.getElementById('drawAgainBtn').addEventListener('click', ()=>{
   closePopup();
-  setTimeout(startSpread, 350);
+  setTimeout(startSpread, 300);
 });
 overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closePopup(); });
 
-/* ================= HAND GESTURE CONTROL (MediaPipe) ================= */
+/* ================= การตรวจจับสัญญาณมือ (MediaPipe) ================= */
 const gestureStatus = document.getElementById('gestureStatus');
 const camVideo = document.getElementById('camVideo');
 const camCanvas = document.getElementById('camCanvas');
@@ -548,7 +478,7 @@ async function initCameraAndGesture(){
     }
     processFrame();
   } catch(err) {
-    gestureStatus.textContent = 'ไม่พบกล้อง · ใช้ปุ่มควบคุมแทน';
+    gestureStatus.textContent = 'ไม่พบกล้อง · ใช้ปุ่มกดแทน';
   }
 }
 
@@ -564,7 +494,6 @@ function onHandResults(results){
   if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
     const landmarks = results.multiHandLandmarks[0];
     
-    // วาดจุดเชื่อมต่อมือ
     ctx.fillStyle = '#e8c877';
     landmarks.forEach(p => {
       ctx.beginPath();
@@ -579,21 +508,21 @@ function onHandResults(results){
 
     tips.forEach(idx => {
       const dist = Math.hypot(landmarks[idx].x - wrist.x, landmarks[idx].y - wrist.y);
-      if (dist < 0.32) isOpen = false; // ปลายปลายนิ้วใกล้มือ = ไม่ใช่การกางมือ
-      if (dist > 0.26) isFist = false; // ปลายปลายนิ้วไกลมือ = ไม่ใช่การกำมือ
+      if (dist < 0.32) isOpen = false;
+      if (dist > 0.26) isFist = false;
     });
 
     if (isOpen) {
       openHandFrames++;
       fistFrames = 0;
-      gestureStatus.textContent = '✋ ตรวจพบกางมือ… เริ่มสุ่ม';
+      gestureStatus.textContent = '✋ ตรวจพบกางมือ… เริ่มวนสุ่ม';
       if (openHandFrames >= 5 && !isSpinning) {
         startSpread();
       }
     } else if (isFist) {
       fistFrames++;
       openHandFrames = 0;
-      gestureStatus.textContent = '✊ ตรวจพบกำมือ… หยุดและทำนาย';
+      gestureStatus.textContent = '✊ ตรวจพบกำมือ… หยุดเปิดคำทำนาย';
       if (fistFrames >= 5 && isSpinning) {
         stopSpreadAndPick();
       }
@@ -605,11 +534,10 @@ function onHandResults(results){
   } else {
     openHandFrames = 0;
     fistFrames = 0;
-    gestureStatus.textContent = 'มองไม่เห็นมือ · ยื่นมือเข้ากล้อง';
+    gestureStatus.textContent = 'ยื่นมือเข้ากล้อง ✋/✊';
   }
 }
 
-// เรียกใช้งานเมื่อโหลดหน้าเว็บ
 window.addEventListener('load', initCameraAndGesture);
 </script>
 </body>

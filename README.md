@@ -5,53 +5,44 @@
   <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
   <img src="https://img.shields.io/badge/MediaPipe-00979D?style=for-the-badge&logo=google&logoColor=white" alt="MediaPipe" />
-  <img src="https://img.shields.io/badge/License-MIT-gold?style=for-the-badge" alt="License" />
 </p>
 
-**Arcanum** คือเว็บแอปพลิเคชันดูดวงไพ่ยิปซีแบบ interactive ครบทั้ง 78 ใบ นำเสนอด้วยงานดีไซน์สไตล์แฟนตาซี ลึกลับ และหรูหรา มาพร้อมกับระบบสุ่มไพ่แบบวงกลมหมุนวนรอบศูนย์กลาง (โดยตัวไพ่ตั้งตรงไม่หมุนเอียง) และฟีเจอร์ไฮไลต์อย่าง **Hand Gesture Control** ที่ใช้ปัญญาประดิษฐ์ในการตรวจจับการกำมือเพื่อหยุดการสุ่มไพ่ผ่านกล้อง Webcam
+**Arcanum** เว็บแอปพลิเคชันดูดวงไพ่ยิปซี 78 ใบ ธีมแฟนตาซี พรีเมียม พร้อมระบบการตรวจจับสัญญาณมือ (Hand Gesture Control) ผ่านกล้อง Webcam ด้วยระบบปัญญาประดิษฐ์ MediaPipe
 
 ---
 
-## 🌟 ฟีเจอร์เด่น (Key Features)
+## 🌟 ฟีเจอร์หลัก (Key Features)
 
-- **ฐานข้อมูลไพ่ยิปซีครบ 78 ใบ (Complete 78-Card Deck):** - **Major Arcana 22 ใบ:** ตั้งแต่ *The Fool (0)* จนถึง *The World (XXI)*
-  - **Minor Arcana 56 ใบ:** ครบทั้ง 4 ตระกูล ได้แก่ ถ้วย (Cups), คทา (Wands), ดาบ (Swords) และเหรียญ (Pentacles)
-- **ระบบสุ่มไพ่และ Animation สเปรดวงกลม (Circular Scatter Animation):**
-  - เมื่อคลิกเริ่มไพ่จะกระจายตัวออกจากกองเป็นทรงกลม
-  - ตัวไพ่แต่ละใบจะรักษาแนวตั้งตรง (ไม่หมุนเอียงตามแกน) ในขณะที่ทั้งวงหมุนวนอย่างนุ่มนวล
-- **ระบบตรวจจับท่าทางมือผ่านกล้อง (MediaPipe Hand Gesture Tracking):**
-  - ควบคุมการหยุดไพ่ด้วยการ **กำมือ ✊ (Fist Detection)** ค้างไว้หน้ากล้อง
-  - มีระบบสลับไปใช้การคลิกปุ่มแทนได้ หากไม่อนุญาตการเข้าถึงกล้อง
-- **Pop-up รายละเอียดพร้อมดีไซน์ระดับ พรีเมียม (Esoteric & Magical UI):**
-  - แสดงผลสัญลักษณ์ Line-Art, ชื่อไพ่ภาษาอังกฤษ-ไทย, สรุปคีย์เวิร์ดสำคัญ และคำทำนายอย่างครบถ้วน
-  - ระบบเปลี่ยนสีธีมหลัก (Accent Color) ตามตระกูลของไพ่ที่จับได้แบบไดนามิก
+- **Circular Cards Motion (ตัวไพ่ไม่หมุน):** - เมื่อสั่งกระจายไพ่ กองไพ่จะขยายออกเป็นรูปวงกลมและหมุนวน
+  - **ตัวไพ่แต่ละใบจะรักษาแนวตั้งตรง** ไม่หมุนเอียงตามแกน ช่วยให้ได้ visual ที่สวยงามและสบายตา
+- **Hand Gesture Control (การควบคุมด้วยมือ):**
+  - ✋ **กางมือ (Open Hand):** สั่งเริ่มสุ่มไพ่ (กระจายไพ่และเริ่มหมุนวน)
+  - ✊ **กำมือ (Fist):** สั่งหยุดไพ่และสุ่มสุ่มเปิดไพ่พร้อมคำทำนายทันที
+- **Complete 78 Tarot Cards:** ฐานข้อมูลไพ่ครบถ้วนทั้ง Major Arcana 22 ใบ และ Minor Arcana 56 ใบ (ถ้วย/คทา/ดาบ/เหรียญ)
+- **Fantasy Popup Detail:** หน้าต่างแสดงผลคำทำนายพร้อมชื่อภาษาอังกฤษ-ไทย สัญลักษณ์ Line-Art และการเปลี่ยนสีธีมตามตระกูลไพ่อัตโนมัติ
 
 ---
 
 ## 🛠️ เทคโนโลยีที่ใช้ (Tech Stack)
 
-* **HTML5 / CSS3 (Vanilla Code):** ใช้เทคนิค CSS Flexbox, Grid, 3D Perspective, CSS Variables และ Custom Animations
-* **JavaScript (ES6+):** ใช้ Web Animations API, Math Algorithms สำหรับการจัดตำแหน่งวงกลม และ Event Loop
-* **MediaPipe Hands (Google AI):** โมเดล Machine Learning แบบ Real-time บนเบราว์เซอร์สำหรับตรวจจับ พิกัดมือ (Hand Landmarks)
-* **Google Fonts:**
-  * `Cinzel Decorative` & `Cinzel` (สำหรับหัวข้อภาษาอังกฤษสไตล์คลาสสิก)
-  * `Charmonman` & `Taviraj` (สำหรับภาษาไทยสไตล์แฟนตาซีและเนื้อหาอ่านง่าย)
+- **HTML5 & CSS3:** พัฒนาโครงสร้าง ลำดับชั้นฟอนต์ และ Animation แบบ 2D Transform
+- **JavaScript (Vanilla ES6+):** การคำนวณตำแหน่งวงกลมเชิงคณิตศาสตร์ (`Math.cos`, `Math.sin`) และ Animation Loop
+- **MediaPipe Hands:** โมเดล Machine Learning ตรวจจับและวิเคราะห์ตำแหน่งข้อมือและปลายนิ้ว real-time
 
 ---
 
 ## 🚀 วิธีการใช้งาน (Getting Started)
 
-เนื่องจากโปรเจกต์นี้มีฟีเจอร์การดึงภาพจากกล้อง Webcam (MediaPipe) การเปิดไฟล์ `index.html` ตรงๆ ผ่านระบบไฟล์ (`file:///`) อาจทำให้เบราว์เซอร์บล็อกการทำงานของกล้องได้ตามนโยบายความปลอดภัย
+เนื่องจากระบบต้องเรียกใช้งานกล้อง Webcam ควรเปิดใช้งานผ่าน **Local Web Server** หรือ **HTTPS**:
 
-แนะนำให้รันโปรเจกต์ผ่าน **Local Web Server** ด้วยวิธีใดวิธีหนึ่งดังนี้:
+### เปิดด้วย VS Code (Live Server)
+1. เปิดโฟลเดอร์โปรเจกต์ใน VS Code
+2. คลิกขวาที่ไฟล์ `index.html` แล้วเลือก **Open with Live Server**
 
-### วิธีที่ 1: รันด้วย VS Code (Extension Live Server)
-1. เปิดโฟลเดอร์โปรเจกต์ในโปรแกรม **VS Code**
-2. ติดตั้งส่วนขยาย (Extension) ชื่อ **Live Server**
-3. คลิกขวาที่ไฟล์ `index.html` แล้วเลือก **Open with Live Server**
+---
 
-### วิธีที่ 2: รันด้วย Python Server (ผ่าน Terminal)
-1. เปิด Terminal หรือ Command Prompt ในโฟลเดอร์โปรเจกต์
-2. ป้อนคำสั่ง:
-   ```bash
-   python -m http.server 8000
+## 🎮 วิธีการเล่น (How to Play)
+
+1. **กางมือ ✋ หน้ากล้อง:** เพื่อสั่งให้กองไพ่กระจายตัวออกและเริ่มหมุนวนสุ่ม
+2. **กำมือ ✊ หน้ากล้อง:** เพื่อสั่งหยุดไพ่ และเปิดคำทำนายชะตาชีวิตของคุณ
+3. (สามารถใช้ปุ่มกดบนหน้าจอหรือคลิกที่กองไพ่แทนการใช้กล้องได้เช่นกัน)

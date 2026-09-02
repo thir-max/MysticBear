@@ -3,30 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mystic Bear Tarot & Daily Horoscope - ดูดวงทำนายดวงวันนี้</title>
+  <title>Mystic Bear Tarot & Daily Horoscope</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
   <style>
     :root {
-      --bg-color-1: #05020a;
-      --bg-color-2: #100720;
-      --bg-color-3: #1f0b36;
+      --bg-color-1: #06030c;
+      --bg-color-2: #120824;
+      --bg-color-3: #220d3a;
       --accent-gold: #ffe58f;
-      --accent-glow: rgba(255, 229, 143, 0.4);
-      --font-th: 'Noto Sans Thai', sans-serif;
-      --font-en: 'Cinzel', serif;
+      --accent-glow: rgba(255, 229, 143, 0.6);
+      --font-main: 'Noto Sans Thai', sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
 
     body {
-      font-family: var(--font-th);
+      font-family: var(--font-main);
       background: radial-gradient(ellipse at bottom, var(--bg-color-3) 0%, var(--bg-color-2) 50%, var(--bg-color-1) 100%);
       color: #ffffff;
       min-height: 100vh;
@@ -39,90 +38,6 @@
 
     #stars-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; pointer-events: none; }
     #magic-fx-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 100; pointer-events: none; }
-
-    /* ปุ่มลูกศรย้อนกลับย้อนหน้า (Back Button) */
-    .back-btn {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 229, 143, 0.3);
-      color: var(--accent-gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-      z-index: 60;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-
-    .back-btn:hover {
-      background: rgba(255, 229, 143, 0.2);
-      border-color: var(--accent-gold);
-      transform: scale(1.08);
-      box-shadow: 0 0 15px var(--accent-glow);
-    }
-
-    /* หัวข้อฉากหลัง (Background Floating Header) */
-    .bg-header-text {
-      position: fixed;
-      top: 25px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      z-index: 2;
-      pointer-events: none;
-      width: 90%;
-      max-width: 600px;
-    }
-
-    .bg-header-text .brand-subtitle {
-      font-family: var(--font-en);
-      font-size: 0.7rem;
-      letter-spacing: 5px;
-      color: rgba(224, 215, 245, 0.6);
-      text-transform: uppercase;
-      margin-bottom: 3px;
-    }
-
-    .bg-header-text .brand-title {
-      font-family: var(--font-th);
-      font-size: 1.35rem;
-      font-weight: 500;
-      letter-spacing: 2px;
-      color: var(--accent-gold);
-      text-shadow: 0 0 12px rgba(255, 229, 143, 0.3);
-    }
-
-    .bg-header-text .brand-title-en {
-      font-family: var(--font-en);
-      font-size: 0.8rem;
-      letter-spacing: 3px;
-      color: rgba(255, 255, 255, 0.75);
-      font-weight: 500;
-      margin-bottom: 6px;
-    }
-
-    .bg-header-text .horoscope-tag {
-      font-size: 0.75rem;
-      letter-spacing: 1.5px;
-      font-weight: 300;
-      color: #d6c7f7;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 229, 143, 0.15);
-      padding: 3px 14px;
-      border-radius: 20px;
-      backdrop-filter: blur(4px);
-    }
 
     .app-container {
       position: relative;
@@ -137,71 +52,159 @@
       text-align: center;
     }
 
-    /* Setup Card - ปรับให้เน้นเฉพาะคำถาม ไม่ซ้ำกับฉากหลัง */
+    /* พื้นหลังหัวข้อหลัก (Minimalist & Magical Style) */
+    .background-brand-header {
+      position: absolute;
+      top: 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 25;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    .brand-subtitle {
+      font-weight: 300;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      color: #cbb9f0;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: var(--accent-gold);
+      text-shadow: 0 0 18px var(--accent-glow);
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .brand-title-en {
+      font-weight: 400;
+      font-size: 0.8rem;
+      color: #dfd5f5;
+      letter-spacing: 1px;
+    }
+
+    /* เมื่อเข้าสู่โหมดสุ่มไพ่ หัวข้อจะย่อขนาดไปอยู่ที่มุมขวาบน */
+    .background-brand-header.minimized {
+      top: 15px;
+      right: 20px;
+      left: auto;
+      align-items: flex-end;
+      transform: scale(0.65);
+      transform-origin: top right;
+      opacity: 0.85;
+    }
+
+    /* ปุ่มลูกศรย้อนหน้าเล็กๆ (มุมซ้ายบน) */
+    .back-nav-btn {
+      position: absolute;
+      top: 18px;
+      left: 20px;
+      width: 38px;
+      height: 38px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 229, 143, 0.35);
+      border-radius: 50%;
+      color: var(--accent-gold);
+      font-size: 1.1rem;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      z-index: 30;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .back-nav-btn:hover {
+      background: rgba(255, 229, 143, 0.2);
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 15px var(--accent-glow);
+      transform: scale(1.08);
+    }
+
+    /* Setup Card */
     .setup-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 229, 143, 0.25);
-      border-radius: 24px;
-      padding: 40px 28px;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 229, 143, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1.5px solid rgba(255, 229, 143, 0.35);
+      border-radius: 28px;
+      padding: 36px 24px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 229, 143, 0.15);
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       display: flex;
       flex-direction: column;
       align-items: center;
       z-index: 30;
+      margin-top: 50px;
       transition: transform 0.4s ease, opacity 0.4s ease;
     }
 
-    .setup-card h1 {
-      font-size: 1.1rem;
+    .horoscope-tag {
       font-weight: 400;
+      background: rgba(255, 229, 143, 0.1);
+      border: 1px solid rgba(255, 229, 143, 0.3);
+      border-radius: 20px;
+      padding: 5px 16px;
+      font-size: 0.8rem;
+      color: var(--accent-gold);
+      margin-bottom: 22px;
+      letter-spacing: 0.5px;
+    }
+
+    .setup-card h1 {
+      font-weight: 500;
+      font-size: 1.1rem;
       color: #ffffff;
-      letter-spacing: 1px;
-      margin-bottom: 28px;
-      line-height: 1.6;
+      margin-bottom: 24px;
+      line-height: 1.5;
     }
 
     .btn-group { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 260px; }
 
     .btn {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 229, 143, 0.3);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(255, 229, 143, 0.4);
       color: #ffffff;
       padding: 12px 20px;
       border-radius: 30px;
-      font-family: var(--font-th);
-      font-size: 0.9rem;
-      font-weight: 400;
-      letter-spacing: 0.5px;
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      font-weight: 500;
       cursor: pointer;
       backdrop-filter: blur(10px);
       transition: all 0.3s ease;
     }
 
     .btn:hover, .btn:active {
-      background: rgba(255, 229, 143, 0.2);
+      background: rgba(255, 229, 143, 0.25);
       border-color: var(--accent-gold);
       box-shadow: 0 0 20px var(--accent-glow);
       transform: translateY(-2px);
     }
 
-    .btn-primary { background: rgba(255, 229, 143, 0.15); border-color: var(--accent-gold); font-weight: 500; }
+    .btn-primary { background: rgba(255, 229, 143, 0.2); border-color: var(--accent-gold); font-weight: 600; }
 
     /* น้องหมี */
     .bear-wrapper {
       position: absolute;
-      top: 110px;
-      width: 85px;
-      height: 85px;
+      top: 35px;
+      width: 90px;
+      height: 90px;
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 20;
     }
 
-    .bear-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 12px rgba(255, 229, 143, 0.3)); }
+    .bear-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 12px rgba(255, 229, 143, 0.4)); }
     .wand-arm { transform-origin: 75px 65px; animation: floatWand 3s ease-in-out infinite; }
     .casting .wand-arm { animation: castMagic 0.4s ease-in-out infinite alternate !important; }
 
@@ -217,16 +220,16 @@
 
     .hand-status-badge {
       position: absolute;
-      top: 110px;
+      top: 18px;
       display: none;
       align-items: center;
       gap: 8px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 229, 143, 0.25);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 229, 143, 0.3);
       padding: 6px 16px;
       border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 400;
+      font-size: 0.85rem;
+      font-weight: 500;
       color: #f3e8ff;
       backdrop-filter: blur(8px);
       z-index: 20;
@@ -250,9 +253,9 @@
       width: 105px;
       height: 168px;
       background: radial-gradient(circle at center, #3b1b6e 0%, #1c083b 70%, #0d021f 100%);
-      border: 1.5px solid var(--accent-gold);
+      border: 2px solid var(--accent-gold);
       border-radius: 14px;
-      box-shadow: 0 0 15px rgba(255, 229, 143, 0.25), 0 10px 30px rgba(0, 0, 0, 0.85);
+      box-shadow: 0 0 15px rgba(255, 229, 143, 0.3), 0 10px 30px rgba(0, 0, 0, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -268,7 +271,7 @@
       content: '';
       position: absolute;
       top: 5px; left: 5px; right: 5px; bottom: 5px;
-      border: 1px dashed rgba(255, 229, 143, 0.35);
+      border: 1px dashed rgba(255, 229, 143, 0.4);
       border-radius: 10px;
       pointer-events: none;
     }
@@ -299,9 +302,9 @@
 
     .popup-card-box {
       background: rgba(22, 11, 40, 0.95);
-      border: 1.5px solid var(--accent-gold);
+      border: 2px solid var(--accent-gold);
       border-radius: 24px;
-      box-shadow: 0 0 50px rgba(255, 229, 143, 0.35);
+      box-shadow: 0 0 50px rgba(255, 229, 143, 0.4);
       width: 90%;
       max-width: 350px;
       padding: 24px 20px;
@@ -317,11 +320,11 @@
     .card-img-wrapper {
       width: 130px;
       height: 200px;
-      border: 1.5px solid var(--accent-gold);
+      border: 2px solid var(--accent-gold);
       border-radius: 14px;
       margin: 10px 0 14px 0;
       background: radial-gradient(circle at center, #3b1b6e 0%, #120529 100%);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255, 229, 143, 0.25);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255, 229, 143, 0.3);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -332,12 +335,12 @@
     .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
     .card-img-placeholder { font-size: 4rem; color: var(--accent-gold); text-shadow: 0 0 16px var(--accent-glow); }
 
-    .card-header { font-family: var(--font-en); font-size: 0.7rem; letter-spacing: 3px; color: #a393c8; font-weight: 500; }
-    .card-title { font-size: 1.25rem; font-weight: 500; color: var(--accent-gold); margin-bottom: 1px; }
-    .card-title-en { font-family: var(--font-en); font-size: 0.8rem; letter-spacing: 1px; color: #9f8ec2; margin-bottom: 8px; }
-    .card-keywords { display: flex; wrap: wrap; gap: 4px; justify-content: center; margin-bottom: 10px; }
-    .tag { font-size: 0.68rem; font-weight: 400; background: rgba(255, 229, 143, 0.12); border: 1px solid rgba(255, 229, 143, 0.3); color: var(--accent-gold); padding: 2px 6px; border-radius: 8px; }
-    .card-meaning { font-size: 0.82rem; line-height: 1.5; color: #ded5f5; text-align: justify; overflow-y: auto; max-height: 110px; margin-bottom: 16px; padding: 0 4px; }
+    .card-header { font-size: 0.72rem; letter-spacing: 2px; color: #a393c8; font-weight: 600; }
+    .card-title { font-size: 1.3rem; font-weight: 600; color: var(--accent-gold); margin-bottom: 1px; }
+    .card-title-en { font-size: 0.8rem; color: #9f8ec2; margin-bottom: 8px; }
+    .card-keywords { display: flex; gap: 4px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap; }
+    .tag { font-size: 0.68rem; font-weight: 500; background: rgba(255, 229, 143, 0.15); border: 1px solid rgba(255, 229, 143, 0.4); color: var(--accent-gold); padding: 2px 6px; border-radius: 8px; }
+    .card-meaning { font-size: 0.83rem; line-height: 1.5; color: #ded5f5; text-align: justify; overflow-y: auto; max-height: 110px; margin-bottom: 16px; padding: 0 4px; }
 
     .popup-actions { display: flex; gap: 8px; width: 100%; justify-content: center; }
     .popup-actions .btn { flex: 1; padding: 10px 8px; font-size: 0.85rem; }
@@ -347,50 +350,44 @@
     .star-rating label { font-size: 2.3rem; color: rgba(255, 255, 255, 0.18); cursor: pointer; transition: all 0.2s ease; }
     .star-rating label:hover, .star-rating label:hover ~ label, .star-rating input:checked ~ label { color: var(--accent-gold); text-shadow: 0 0 15px var(--accent-glow); }
 
-    .rating-feedback { font-size: 1.05rem; font-weight: 500; color: var(--accent-gold); height: 28px; margin-bottom: 12px; }
-    .thank-box { width: 92%; max-width: 440px; padding: 36px 24px; background: rgba(22, 10, 38, 0.95); border: 1.5px solid var(--accent-gold); border-radius: 28px; box-shadow: 0 0 60px rgba(255, 229, 143, 0.4); }
-    .hero-credits { background: rgba(255, 229, 143, 0.06); border: 1px solid rgba(255, 229, 143, 0.3); border-radius: 20px; padding: 22px 16px; margin: 20px 0; box-shadow: inset 0 0 15px rgba(255, 229, 143, 0.08); }
-    .credit-title-th { font-size: 1.05rem; font-weight: 500; color: #ffffff; margin-bottom: 4px; }
-    .credit-title-en { font-family: var(--font-en); font-size: 0.9rem; letter-spacing: 1px; color: #cbb9f0; margin-bottom: 12px; }
-    .credit-author { font-size: 1.15rem; font-weight: 600; color: var(--accent-gold); letter-spacing: 0.5px; text-shadow: 0 0 12px var(--accent-glow); }
+    .rating-feedback { font-size: 1.1rem; font-weight: 600; color: var(--accent-gold); height: 28px; margin-bottom: 12px; }
+    .thank-box { width: 92%; max-width: 440px; padding: 36px 24px; background: rgba(22, 10, 38, 0.95); border: 2px solid var(--accent-gold); border-radius: 28px; box-shadow: 0 0 60px rgba(255, 229, 143, 0.45); }
+    .hero-credits { background: rgba(255, 229, 143, 0.08); border: 1px solid rgba(255, 229, 143, 0.35); border-radius: 20px; padding: 22px 16px; margin: 20px 0; box-shadow: inset 0 0 15px rgba(255, 229, 143, 0.1); }
+    .credit-title-th { font-size: 1.1rem; font-weight: 600; color: #ffffff; margin-bottom: 4px; }
+    .credit-title-en { font-size: 0.95rem; color: #cbb9f0; margin-bottom: 12px; }
+    .credit-author { font-size: 1.2rem; font-weight: 700; color: var(--accent-gold); letter-spacing: 0.5px; text-shadow: 0 0 12px var(--accent-glow); }
   </style>
 </head>
 <body>
 
-  <!-- Background Canvas -->
   <canvas id="stars-canvas"></canvas>
   <canvas id="magic-fx-canvas"></canvas>
 
-  <!-- ปุ่มลูกศรย้อนกลับย้อนหน้า (Back Button) -->
-  <button class="back-btn" onclick="goBackToStart()" title="ย้อนกลับไปหน้าแรก">‹</button>
-
-  <!-- ข้อความชื่อเว็บ & คำทำนายดวงย้ายมาอยู่ที่พื้นหลัง (Floating Header Background) -->
-  <div class="bg-header-text">
-    <div class="brand-subtitle">🔮 TAROT & HOROSCOPE 🔮</div>
-    <div class="brand-title">คุณหมีทำนายดวงยิปซี</div>
-    <div class="brand-title-en">Mystic Bear Daily Horoscope</div>
-    <div class="horoscope-tag">✨ ทำนายดวงวันนี้ • Today's Fortune Reading ✨</div>
-  </div>
-
   <div class="app-container">
+    <!-- หัวข้อแบรนด์บนพื้นหลัง (ย่อไปขวาบนอัตโนมัติเมื่อเริ่มเกม) -->
+    <div id="background-brand" class="background-brand-header">
+      <div class="brand-subtitle">Mystic Bear Tarot & Daily Horoscope</div>
+      <div class="brand-title">คุณหมีทำนายดวง</div>
+    </div>
 
-    <!-- หน้าแรกถามความยินยอม (เฉพาะปุ่มเลือก) -->
+    <!-- ปุ่มลูกศรย้อนหน้าเล็กๆ มุมซ้ายบน -->
+    <button id="back-nav-btn" class="back-nav-btn" onclick="returnToSetup()" title="ย้อนกลับ">←</button>
+
+    <!-- Setup Card -->
     <div id="setup-screen" class="setup-card">
+      <div class="horoscope-tag">✨ ทำนายดวงวันนี้ • Today's Fortune Reading ✨</div>
       <h1>ต้องการร่ายเวทมนตร์กับคุณหมีหรือไม่?</h1>
-      
       <div class="btn-group">
-        <button class="btn btn-primary" onclick="handleSetupChoice(true)">✨ ต้องการ (เปิดกล้องร่ายมนต์)</button>
-        <button class="btn" onclick="handleSetupChoice(false)">👋 ไม่เป็นไร (โหมดแตะสัมผัส)</button>
+        <button class="btn btn-primary" onclick="handleSetupChoice(true)">✨ ร่ายมนต์กับคุณหมี (เปิดกล้อง)</button>
+        <button class="btn" onclick="handleSetupChoice(false)">👋 โหมดแตะสัมผัส</button>
       </div>
     </div>
 
-    <!-- Badge สถานะตรวจจับมือ -->
     <div id="hand-status" class="hand-status-badge">
       <span id="hand-icon">✋</span>
       <span id="hand-text">กำลังค้นหามือ...</span>
     </div>
 
-    <!-- น้องหมี -->
     <div id="bear-container" class="bear-wrapper">
       <div class="magic-sparkles">
         <span class="sparkle">✨</span><span class="sparkle">⭐</span><span class="sparkle">✨</span>
@@ -440,8 +437,8 @@
   <!-- Rating Modal -->
   <div id="rating-modal" class="modal-overlay">
     <div class="popup-card-box">
-      <h2 style="color: var(--accent-gold); font-size: 1.25rem; font-weight: 500;">ให้คะแนนความพึงพอใจ</h2>
-      <p style="font-family: var(--font-en); font-size: 0.8rem; color: #d0c2ee; margin-top: 2px;">Rate Your Experience</p>
+      <h2 style="color: var(--accent-gold); font-size: 1.25rem;">ให้คะแนนความพึงพอใจ</h2>
+      <p style="font-size: 0.85rem; color: #d0c2ee; margin-top: 2px;">Rate Your Experience</p>
       <div class="star-rating">
         <input type="radio" id="star5" name="rating" value="5" onclick="selectRating(5)"><label for="star5">★</label>
         <input type="radio" id="star4" name="rating" value="4" onclick="selectRating(4)"><label for="star4">★</label>
@@ -458,23 +455,22 @@
   <div id="thank-modal" class="modal-overlay">
     <div class="popup-card-box thank-box">
       <div style="font-size: 3.2rem; margin-bottom: 8px;">🙏✨</div>
-      <h2 style="color: var(--accent-gold); font-size: 1.4rem; font-weight: 500; margin-bottom: 4px;">ขอบคุณที่ร่วมทำนาย</h2>
-      <p style="font-family: var(--font-en); font-size: 0.9rem; color: #d0c2ee;">Thank you for your reading!</p>
+      <h2 style="color: var(--accent-gold); font-size: 1.5rem; margin-bottom: 4px;">ขอบคุณที่ร่วมทำนาย</h2>
+      <p style="font-size: 0.95rem; color: #d0c2ee;">Thank you for your reading!</p>
       <div class="hero-credits">
         <div class="credit-title-th">เว็บไซต์สุ่มไพ่ยิปซีแบบทดลอง</div>
         <div class="credit-title-en">Trial Tarot Reading Website</div>
-        <div style="margin: 10px 0; border-top: 1px dashed rgba(255,229,143,0.3);"></div>
-        <div style="font-family: var(--font-en); font-size: 0.75rem; letter-spacing: 2px; color: #a894cf; margin-bottom: 4px;">CREATED BY</div>
+        <div style="margin: 10px 0; border-top: 1px dashed rgba(255,229,143,0.4);"></div>
+        <div style="font-size: 0.85rem; color: #a894cf; margin-bottom: 4px;">CREATED BY</div>
         <div class="credit-author">Funsiri Hammachukaittikul</div>
       </div>
-      <button class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 0.95rem;" onclick="finishAndReset()">กลับไปที่กองไพ่ (Back to Deck)</button>
+      <button class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1rem;" onclick="finishAndReset()">กลับไปที่กองไพ่ (Back to Deck)</button>
     </div>
   </div>
 
   <video id="webcam" playsinline></video>
 
   <script>
-    /* Audio API */
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playSpellCastSound() {
@@ -507,7 +503,6 @@
       });
     }
 
-    /* Magic FX System */
     const fxCanvas = document.getElementById('magic-fx-canvas');
     const fxCtx = fxCanvas.getContext('2d');
     let magicParticles = [];
@@ -562,41 +557,45 @@
 
     function handleSetupChoice(wantMagic) {
       const setupScreen = document.getElementById('setup-screen');
+      const backgroundBrand = document.getElementById('background-brand');
+      const backNavBtn = document.getElementById('back-nav-btn');
+
       if (wantMagic) { playSpellCastSound(); triggerMagicBurst(true); } 
       else { playMagicSound(); triggerMagicBurst(false); }
+
       setupScreen.style.transform = 'scale(0.8)';
       setupScreen.style.opacity = '0';
+
+      // ย่อหัวข้อไปมุมขวาบน และแสดงปุ่มย้อนกลับ
+      backgroundBrand.classList.add('minimized');
+      backNavBtn.style.display = 'flex';
+
       setTimeout(() => {
         setupScreen.style.display = 'none';
         if (wantMagic) initMagicMode(); else initTouchMode();
       }, 350);
     }
 
-    /* ฟังก์ชันปุ่มลูกศรย้อนกลับ (Back Button Logic) */
-    function goBackToStart() {
-      playMagicSound();
+    function returnToSetup() {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      currentState = 'SETUP';
 
-      // ซ่อนหน้าต่าง Popups ทั้งหมด
-      document.getElementById('result-modal').style.display = 'none';
-      document.getElementById('rating-modal').style.display = 'none';
-      document.getElementById('thank-modal').style.display = 'none';
-      
-      // ซ่อนกองไพ่ หมี และ badge
       document.getElementById('ellipse-carousel').style.display = 'none';
       document.getElementById('bear-container').style.display = 'none';
       document.getElementById('hand-status').style.display = 'none';
+      document.getElementById('back-nav-btn').style.display = 'none';
 
-      // แสดง Setup Screen หน้าแรกกลับมา
+      const backgroundBrand = document.getElementById('background-brand');
+      backgroundBrand.classList.remove('minimized');
+
       const setupScreen = document.getElementById('setup-screen');
       setupScreen.style.display = 'flex';
       setupScreen.style.transform = 'scale(1)';
       setupScreen.style.opacity = '1';
 
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
-      currentState = 'SETUP';
+      playMagicSound();
     }
 
-    /* Tarot Data */
     let tarotDeck = [];
     fetch('cards.json')
       .then(res => res.json())
@@ -604,12 +603,10 @@
       .catch(() => {
         tarotDeck = [
           { id: "m00", arcana: "Major Arcana", nameEn: "The Fool", nameTh: "ผู้เริ่มต้น", icon: "🃏", image: "", keywords: ["จุดเริ่มต้น", "อิสระ"], meaning: "คุณกำลังยืนอยู่ตรงจุดเริ่มต้นของการเดินทางครั้งใหม่ในชีวิต ปล่อยวางความกลัวและเชื่อมั่นในสัญชาตญาณ" },
-          { id: "m01", arcana: "Major Arcana", nameEn: "The Magician", nameTh: "นักมายากล", icon: "🪄", image: "", keywords: ["ศักยภาพ", "ไหวพริบ"], meaning: "ทรัพยากรทุกอย่างพร้อมแล้วในมือคุณ จงมั่นใจและเริ่มแปรเปลี่ยนความฝันให้กลายเป็นความจริง" },
-          { id: "m02", arcana: "Major Arcana", nameEn: "The High Priestess", nameTh: "นักบวชหญิง", icon: "🌙", image: "", keywords: ["สัญชาตญาณ", "ปัญญา"], meaning: "คำตอบซ่อนอยู่ในจิตใจของคุณ รับฟังเสียงสัญชาตญาณและสังเกตการณ์อย่างเงียบๆ" }
+          { id: "m01", arcana: "Major Arcana", nameEn: "The Magician", nameTh: "นักมายากล", icon: "🪄", image: "", keywords: ["ศักยภาพ", "ไหวพริบ"], meaning: "ทรัพยากรทุกอย่างพร้อมแล้วในมือคุณ จงมั่นใจและเริ่มแปรเปลี่ยนความฝันให้กลายเป็นความจริง" }
         ];
       });
 
-    /* Background Stars */
     const canvas = document.getElementById('stars-canvas');
     const ctx = canvas.getContext('2d');
     let stars = [];
@@ -636,11 +633,10 @@
     function animateStars() { ctx.clearRect(0, 0, canvas.width, canvas.height); stars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animateStars); }
     window.addEventListener('resize', resizeCanvas); initStars(); animateStars();
 
-    /* การจัดการกองไพ่ */
     const carousel = document.getElementById('ellipse-carousel');
     const totalMiniCards = 14;
     let angleOffset = 0;
-    let currentState = 'DECK';
+    let currentState = 'SETUP';
     let isGestureMode = false;
     let animationFrameId = null;
     let selectedStarCount = 5;
@@ -776,7 +772,6 @@
       renderDeckState();
     }
 
-    /* Rating & Modal logic */
     function openRatingModal() {
       document.getElementById('result-modal').style.display = 'none';
       document.getElementById('rating-modal').style.display = 'flex';
@@ -804,7 +799,6 @@
       renderDeckState();
     }
 
-    /* Webcam Hand Gesture */
     function initTouchMode() {
       isGestureMode = false;
       document.getElementById('bear-container').style.display = 'flex';

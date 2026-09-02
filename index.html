@@ -51,7 +51,7 @@
       text-align: center;
     }
 
-    /* หน้าถามร่ายเวทมนตร์ */
+    /* หน้าแรกถามความยินยอม */
     .setup-card {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(243, 216, 132, 0.2);
@@ -64,7 +64,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      z-index: 20;
+      z-index: 30;
     }
 
     .setup-card h1 {
@@ -82,10 +82,10 @@
       background: rgba(255, 255, 255, 0.05);
       border: 1.5px solid rgba(243, 216, 132, 0.3);
       color: #ffffff;
-      padding: 14px 24px;
+      padding: 12px 20px;
       border-radius: 30px;
       font-family: var(--font-main);
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 500;
       cursor: pointer;
       backdrop-filter: blur(10px);
@@ -104,9 +104,9 @@
     /* น้องหมี */
     .bear-wrapper {
       position: absolute;
-      top: 40px;
-      width: 100px;
-      height: 100px;
+      top: 35px;
+      width: 90px;
+      height: 90px;
       display: none;
       justify-content: center;
       align-items: center;
@@ -173,40 +173,48 @@
       font-size: 1.4rem;
       color: var(--accent-gold);
       transition: transform 0.05s linear;
-    }
-
-    /* การ์ดผลคำทำนายหลัก */
-    .card-display {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      max-width: 320px;
-      z-index: 15;
-      margin-top: 80px;
-    }
-
-    .tarot-card {
-      width: 220px;
-      height: 340px;
-      background: rgba(20, 10, 35, 0.85);
-      border: 1.5px solid var(--accent-gold);
-      border-radius: 16px;
-      box-shadow: 0 0 30px rgba(243, 216, 132, 0.3);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 20px 16px;
-      backdrop-filter: blur(12px);
       cursor: pointer;
     }
 
-    .card-header { font-size: 0.75rem; letter-spacing: 2px; color: #a393c8; font-weight: 600; }
-    .card-title { font-size: 1.25rem; font-weight: 600; color: var(--accent-gold); margin: 6px 0 2px 0; }
-    .card-title-en { font-size: 0.8rem; color: #9f8ec2; margin-bottom: 8px; }
-    .card-keywords { display: flex; wrap: wrap; gap: 4px; justify-content: center; margin-bottom: 8px; }
+    /* ป๊อบอัพแสดงรายละเอียดไพ่ (Modal Popup) */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(5, 2, 12, 0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+    }
+
+    .tarot-popup {
+      background: rgba(20, 10, 35, 0.92);
+      border: 1.5px solid var(--accent-gold);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(243, 216, 132, 0.3);
+      width: 90%;
+      max-width: 320px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      animation: popupAnim 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popupAnim { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+    .card-header { font-size: 0.75rem; letter-spacing: 2px; color: #a393c8; font-weight: 600; margin-bottom: 4px; }
+    .card-title { font-size: 1.3rem; font-weight: 600; color: var(--accent-gold); margin-bottom: 2px; }
+    .card-title-en { font-size: 0.8rem; color: #9f8ec2; margin-bottom: 12px; }
+    .card-keywords { display: flex; wrap: wrap; gap: 4px; justify-content: center; margin-bottom: 12px; }
     .tag { font-size: 0.7rem; font-weight: 500; background: rgba(243, 216, 132, 0.1); border: 1px solid rgba(243, 216, 132, 0.3); color: var(--accent-gold); padding: 2px 6px; border-radius: 8px; }
-    .card-meaning { font-size: 0.85rem; line-height: 1.5; color: #ded5f5; text-align: justify; overflow-y: auto; max-height: 125px; }
+    .card-meaning { font-size: 0.85rem; line-height: 1.55; color: #ded5f5; text-align: justify; overflow-y: auto; max-height: 140px; margin-bottom: 20px; padding: 0 4px; }
+
+    .popup-actions { display: flex; gap: 10px; width: 100%; justify-content: center; }
+    .popup-actions .btn { flex: 1; padding: 10px 12px; font-size: 0.85rem; }
   </style>
 </head>
 <body>
@@ -256,24 +264,21 @@
 
     <div id="ellipse-carousel" class="ellipse-container"></div>
 
-    <div id="card-display" class="card-display">
-      <div class="tarot-card" onclick="startEllipseShuffle()">
-        <div class="card-header" id="card-arcana">MAJOR ARCANA</div>
-        <div>
-          <div class="card-title" id="card-name-th">แตะเพื่อวนสุ่มไพ่</div>
-          <div class="card-title-en" id="card-name-en">Tap or Gestures to Shuffle</div>
-          <div class="card-keywords" id="card-keywords">
-            <span class="tag">ชะตาชีวิต</span><span class="tag">คำตอบ</span>
-          </div>
-        </div>
-        <div class="card-meaning" id="card-meaning">
-          แตะที่ไพ่ หรือกำมือ (✊) ค้างไว้ครู่หนึ่ง เพื่อให้คุณหมีร่ายเวทหมุนสุ่มไพ่ให้คุณ
-        </div>
+  </div>
+
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="tarot-popup">
+      <div class="card-header" id="pop-arcana">MAJOR ARCANA</div>
+      <div class="card-title" id="pop-name-th">ชื่อไพ่</div>
+      <div class="card-title-en" id="pop-name-en">Card Name</div>
+      <div class="card-keywords" id="pop-keywords"></div>
+      <div class="card-meaning" id="pop-meaning">รายละเอียดคำทำนาย...</div>
+
+      <div class="popup-actions">
+        <button class="btn btn-primary" onclick="closePopupAndResume()">🔮 สุ่มใหม่</button>
+        <button class="btn" onclick="closePopupAndResume()">✨ รับคำทำนาย</button>
       </div>
-
-      <button class="btn btn-primary" style="margin-top: 18px; width: 100%; max-width: 220px;" onclick="startEllipseShuffle()">🔮 สุ่มไพ่ใหม่</button>
     </div>
-
   </div>
 
   <video id="webcam" playsinline></video>
@@ -295,21 +300,6 @@
         osc.connect(gain); gain.connect(audioCtx.destination);
         osc.start(now + i * 0.08); osc.stop(now + i * 0.08 + 0.4);
       });
-    }
-
-    function playCardCarouselSound() {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const now = audioCtx.currentTime;
-      for (let i = 0; i < 10; i++) {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(180 + Math.random() * 140, now + i * 0.12);
-        gain.gain.setValueAtTime(0.06, now + i * 0.12);
-        gain.gain.linearRampToValueAtTime(0.005, now + i * 0.12 + 0.08);
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(now + i * 0.12); osc.stop(now + i * 0.12 + 0.08);
-      }
     }
 
     /* 2. ฐานข้อมูลไพ่ Tarot */
@@ -352,12 +342,14 @@
     function animateStars() { ctx.clearRect(0, 0, canvas.width, canvas.height); stars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animateStars); }
     window.addEventListener('resize', resizeCanvas); initStars(); animateStars();
 
-    /* 4. อนิเมชันไพ่หมุนเป็นวงรีเต็มจอแบบชะลอความเร็ว */
+    /* 4. อนิเมชันไพ่หมุนต่อเนื่องจนกว่าจะสั่งหยุด */
     const carousel = document.getElementById('ellipse-carousel');
     const totalMiniCards = 10;
     let angleOffset = 0;
-    let isShuffling = false;
+    let isLooping = false;
     let isGestureMode = false;
+    let animationFrameId = null;
+    let isPopupOpen = false;
 
     function createEllipseCards() {
       carousel.innerHTML = '';
@@ -365,6 +357,8 @@
         const card = document.createElement('div');
         card.className = 'mini-card';
         card.innerText = '✨';
+        // คลิกที่ไพ่เพื่อหยุดร่ายเวท (โหมดแตะสัมผัส)
+        card.onclick = () => stopAndShowPopup();
         carousel.appendChild(card);
       }
     }
@@ -390,72 +384,76 @@
       document.getElementById('hand-text').innerText = text;
     }
 
-    function startEllipseShuffle() {
-      if (isShuffling) return;
-      isShuffling = true;
+    // เริ่มหมุนวนสุ่มไปเรื่อยๆ นานเท่าไหร่ก็ได้
+    function startContinuousShuffle() {
+      if (isLooping) return;
+      isLooping = true;
+      isPopupOpen = false;
 
       const bear = document.getElementById('bear-container');
-      const cardDisplay = document.getElementById('card-display');
-
       bear.classList.add('casting');
-      cardDisplay.style.display = 'none';
       carousel.style.display = 'flex';
 
       if (isGestureMode) {
-        updateBadgeStatus("✊", "คุณหมีกำลังหมุนสุ่มไพ่...");
+        updateBadgeStatus("✋", "กำลังหมุนสุ่ม... (กำมือเพื่อหยุดรับคำทำนาย)");
       }
 
-      playCardCarouselSound();
-
-      let startTime = null;
-      const duration = 1600; // เวลาในการหมุนสุ่ม
-
-      function animateCarousel(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const progress = timestamp - startTime;
-        
-        // ปรับความเร็วการหมุนไพ่ให้ช้าลง นุ่มนวล ชัดเจนขึ้น (จาก 0.22 เหลือ 0.06)
-        angleOffset += 0.06;
+      function loop() {
+        if (!isLooping) return;
+        angleOffset += 0.06; // ความเร็วหมุนนุ่มนวล
         updateEllipsePosition();
-
-        if (progress < duration) {
-          requestAnimationFrame(animateCarousel);
-        } else {
-          // หยุดหมุน ปิดวงรี และโชว์ผลการทำนายค้างไว้อ่าน
-          carousel.style.display = 'none';
-          cardDisplay.style.display = 'flex';
-          bear.classList.remove('casting');
-          
-          const card = tarotDeck[Math.floor(Math.random() * tarotDeck.length)];
-          document.getElementById('card-arcana').innerText = card.arcana;
-          document.getElementById('card-name-th').innerText = card.nameTh;
-          document.getElementById('card-name-en').innerText = card.nameEn;
-          document.getElementById('card-meaning').innerText = card.meaning;
-          document.getElementById('card-keywords').innerHTML = card.keywords.map(k => `<span class="tag">${k}</span>`).join('');
-          
-          playMagicSound();
-          isShuffling = false;
-
-          if (isGestureMode) {
-            updateBadgeStatus("✋", "อ่านคำทำนายเรียบร้อย (กำมือหากต้องการสุ่มใหม่)");
-          }
-        }
+        animationFrameId = requestAnimationFrame(loop);
       }
-      requestAnimationFrame(animateCarousel);
+      loop();
     }
 
-    /* 5. ระบบตรวจจับมือและจังหวะอ่านสัญลักษณ์ */
+    // หยุดหมุน แล้วเด้งป๊อบอัพผลคำทำนาย
+    function stopAndShowPopup() {
+      if (!isLooping) return;
+      isLooping = false;
+      isPopupOpen = true;
+
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+      const bear = document.getElementById('bear-container');
+      bear.classList.remove('casting');
+
+      // สุ่มไพ่ 1 ใบ
+      const card = tarotDeck[Math.floor(Math.random() * tarotDeck.length)];
+      document.getElementById('pop-arcana').innerText = card.arcana;
+      document.getElementById('pop-name-th').innerText = card.nameTh;
+      document.getElementById('pop-name-en').innerText = card.nameEn;
+      document.getElementById('pop-meaning').innerText = card.meaning;
+      document.getElementById('pop-keywords').innerHTML = card.keywords.map(k => `<span class="tag">${k}</span>`).join('');
+
+      playMagicSound();
+
+      // แสดง ป๊อบอัพ
+      document.getElementById('modal-overlay').style.display = 'flex';
+
+      if (isGestureMode) {
+        updateBadgeStatus("✨", "เลือกกดปุ่มด้านล่างเพื่อเริ่มใหม่");
+      }
+    }
+
+    // ปิดป๊อบอัพ แล้วกลับไปหน้าหมุนสุ่มไพ่อีกครั้ง
+    function closePopupAndResume() {
+      document.getElementById('modal-overlay').style.display = 'none';
+      playMagicSound();
+      startContinuousShuffle();
+    }
+
+    /* 5. ระบบตรวจจับมือ */
     function initTouchMode() {
       isGestureMode = false;
       playMagicSound();
       document.getElementById('setup-screen').style.display = 'none';
       document.getElementById('bear-container').style.display = 'flex';
       createEllipseCards();
-      startEllipseShuffle();
+      startContinuousShuffle();
     }
 
     let fistHoldStartTime = 0;
-    let lastShuffleTriggerTime = 0;
 
     function initMagicMode() {
       isGestureMode = true;
@@ -478,14 +476,15 @@
       });
 
       camera.start()
-        .then(() => updateBadgeStatus("✋", "พร้อมร่ายเวท (กำมือเพื่อหมุนสุ่มไพ่)"))
+        .then(() => updateBadgeStatus("✋", "กำลังหมุนสุ่ม... (กำมือเพื่อหยุดรับคำทำนาย)"))
         .catch(() => updateBadgeStatus("👆", "ไม่พบกล้อง เปลี่ยนเป็นระบบแตะสัมผัส"));
 
-      startEllipseShuffle();
+      startContinuousShuffle();
     }
 
     function onHandResults(results) {
-      if (isShuffling) return;
+      // หากเปิดป๊อบอัพอยู่นิ่งๆ หรือไม่ได้เปิดโหมดหมุน ไม่ต้องตรวจจับมือรบกวน
+      if (isPopupOpen || !isLooping) return;
 
       if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
         const landmarks = results.multiHandLandmarks[0];
@@ -493,22 +492,21 @@
         const now = Date.now();
 
         if (distance < 0.25) { 
-          // กำมือ (✊) ค้างไว้ 0.5s ถึงจะเริ่มสุ่มใหม่
+          // กำมือ (✊) -> กำค้างไว้ 0.3s เพื่อสั่งหยุดหมุนไพ่
           if (fistHoldStartTime === 0) {
             fistHoldStartTime = now;
-          } else if (now - fistHoldStartTime > 500 && now - lastShuffleTriggerTime > 3000) {
-            updateBadgeStatus("✊", "ตรวจพบการกำมือ! กำลังร่ายเวทสุ่มใหม่...");
-            lastShuffleTriggerTime = now;
+          } else if (now - fistHoldStartTime > 300) {
+            updateBadgeStatus("✊", "หยุดหมุนแล้ว! กำลังเปิดคำทำนาย...");
             fistHoldStartTime = 0;
-            startEllipseShuffle();
+            stopAndShowPopup();
           }
         } else {
           fistHoldStartTime = 0;
-          updateBadgeStatus("✋", "พร้อมร่ายเวท (กำมือหากต้องการสุ่มใหม่)");
+          updateBadgeStatus("✋", "กำลังหมุนสุ่ม... (กำมือเพื่อหยุดรับคำทำนาย)");
         }
       } else {
         fistHoldStartTime = 0;
-        updateBadgeStatus("✨", "พร้อมร่ายเวท (ยกมือขึ้นเพื่อสุ่มใหม่)");
+        updateBadgeStatus("✋", "กำลังหมุนสุ่ม... (กำมือเพื่อหยุดรับคำทำนาย)");
       }
     }
   </script>

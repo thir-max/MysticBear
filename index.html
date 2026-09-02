@@ -1,17 +1,3 @@
-นำการสุ่มไพ่แบบสับสำรับ (Shuffle Animation) กลับมาให้เรียบร้อยแล้วครับ! พร้อมกับปรับ Layout หน้าแรกให้สวยงามสมดุล ปรับฟอนต์เป็นแบบมินิมอลที่มีน้ำหนักหนาขึ้นเด่นชัด และใส่ระบบเสียงเอฟเฟกต์ (Audio Effects) สไตล์แฟนตาซีเวทมนตร์เข้าในเว็บให้อย่างลงตัวครับ
-สิ่งที่ปรับปรุงและเพิ่มเข้ามาในเวอร์ชันนี้:
- * ดึงระบบสุ่มไพ่แบบเดิมกลับมา + อนิเมชันสับไพ่:
-   * เพิ่มปุ่ม "สับไพ่ใหม่" และ "เลือกไพ่"
-   * มีการ์ดหลังไพ่หมุนสลับกัน (Card Shuffle Effect) พร้อมเสียงสับไพ่แฟนตาซี ก่อนที่จะเปิดเฉลยหน้าไพ่
- * ปรับ Layout หน้าถามร่ายเวทให้สมดุลสวยงาม:
-   * จัดวางข้อความและปุ่มกดให้อยู่ตรงกลางสมดุล (Symmetrical Layout)
-   * ปรับช่องไฟ (Padding/Margin) และเพิ่มการ์ด Glassmorphic ล้อมรอบให้อ่านง่าย สบายตา ไม่โล่งเกินไป
- * ฟอนต์มินิมอลแบบหนาเด่นชัด:
-   * อัปเกรดฟอนต์ Noto Sans Thai เป็นน้ำหนัก Medium (500) และ Semi-Bold (600) ให้ตัวอักษรดูเรียบหรู คมชัด มินิมอลแต่มีความหนาสวยงาม
- * ระบบเสียงเอฟเฟกต์แฟนตาซีเวทมนตร์ (Audio Synth via Web Audio API):
-   * ไม่ต้องโหลดไฟล์เสียงภายนอก (แก้ปัญหาไฟล์เสียงหาย/โหลดไม่ติด) ใช้ Web Audio API สร้างเสียงสังเคราะห์เวทมนตร์ประกายวิบวับ (Magic Chime / Sparkle Sound) และเสียงสับไพ่/เปิดไพ่โดยตรงจากเบราว์เซอร์
-โค้ดฉบับสมบูรณ์ (HTML + CSS + JavaScript)
-สามารถนำโค้ดนี้ไปวางทับในไฟล์ index.html แล้วใช้งานได้ทันทีครับ:
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -19,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mystic Tarot - คุณหมีร่ายเวทมนตร์</title>
   
-  <!-- ฟอนต์ภาษาไทยมินิมอลแบบหนาชัด (Noto Sans Thai: 400, 500, 600) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- MediaPipe / Camera Utilities สำหรับตรวจจับท่าทางมือ -->
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
@@ -38,12 +22,7 @@
       --font-main: 'Noto Sans Thai', sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
 
     body {
       font-family: var(--font-main);
@@ -55,68 +34,46 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-weight: 400;
     }
 
-    /* Canvas พื้นหลังดวงดาว 3D */
-    #stars-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1;
-      pointer-events: none;
-    }
+    #stars-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; pointer-events: none; }
 
-    /* Container หลัก */
     .app-container {
       position: relative;
       z-index: 10;
       width: 100%;
       max-width: 440px;
-      padding: 20px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
     }
 
-    /* ==========================================
-       หน้าแรก (Setup Screen) สมดุล สวยงาม
-       ========================================== */
+    /* หน้าถามร่ายเวทมนตร์ */
     .setup-card {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(243, 216, 132, 0.2);
       border-radius: 28px;
-      padding: 40px 28px;
+      padding: 40px 24px;
       backdrop-filter: blur(16px);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(243, 216, 132, 0.05);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      animation: fadeIn 0.8s ease;
     }
 
     .setup-card h1 {
-      font-size: 1.45rem;
+      font-size: 1.4rem;
       font-weight: 600;
-      letter-spacing: 0.5px;
       color: var(--accent-gold);
-      margin-bottom: 32px;
+      margin-bottom: 28px;
       text-shadow: 0 0 16px var(--accent-glow);
-      line-height: 1.7;
-      word-break: keep-all;
+      line-height: 1.6;
     }
 
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      width: 100%;
-      max-width: 260px;
-    }
+    .btn-group { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 250px; }
 
     .btn {
       background: rgba(255, 255, 255, 0.05);
@@ -127,11 +84,9 @@
       font-family: var(--font-main);
       font-size: 1rem;
       font-weight: 500;
-      letter-spacing: 0.5px;
       cursor: pointer;
       backdrop-filter: blur(10px);
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
     }
 
     .btn:hover, .btn:active {
@@ -141,82 +96,34 @@
       transform: translateY(-2px);
     }
 
-    .btn-primary {
-      background: rgba(243, 216, 132, 0.15);
-      border-color: var(--accent-gold);
-      font-weight: 600;
-    }
+    .btn-primary { background: rgba(243, 216, 132, 0.15); border-color: var(--accent-gold); font-weight: 600; }
 
-    /* ==========================================
-       SVG น้องหมีน่ารัก & แอนิเมชันร่ายเวท
-       ========================================== */
+    /* น้องหมี */
     .bear-wrapper {
       position: relative;
-      width: 120px;
-      height: 120px;
-      margin-bottom: 12px;
+      width: 110px;
+      height: 110px;
+      margin-bottom: 8px;
       display: none;
       justify-content: center;
       align-items: center;
-      animation: fadeIn 0.8s ease;
     }
 
-    .bear-svg {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 0 12px rgba(243, 216, 132, 0.3));
-    }
+    .bear-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 12px rgba(243, 216, 132, 0.3)); }
+    .wand-arm { transform-origin: 75px 65px; animation: floatWand 3s ease-in-out infinite; }
+    .casting .wand-arm { animation: castMagic 0.4s ease-in-out infinite alternate !important; }
 
-    .wand-arm {
-      transform-origin: 75px 65px;
-      animation: floatWand 3s ease-in-out infinite;
-    }
+    @keyframes floatWand { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-10deg); } }
+    @keyframes castMagic { 0% { transform: rotate(-5deg); } 100% { transform: rotate(-30deg); } }
 
-    .casting .wand-arm {
-      animation: castMagic 0.5s ease-in-out infinite alternate !important;
-    }
-
-    @keyframes floatWand {
-      0%, 100% { transform: rotate(0deg); }
-      50% { transform: rotate(-10deg); }
-    }
-
-    @keyframes castMagic {
-      0% { transform: rotate(-5deg) scale(1); }
-      100% { transform: rotate(-28deg) scale(1.1); }
-    }
-
-    .magic-sparkles {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .casting .magic-sparkles {
-      opacity: 1;
-    }
-
-    .sparkle {
-      position: absolute;
-      font-size: 14px;
-      animation: popSparkle 0.8s ease-out infinite;
-    }
-
-    .sparkle:nth-child(1) { top: -10px; left: 0px; animation-delay: 0s; }
-    .sparkle:nth-child(2) { top: -20px; left: -15px; animation-delay: 0.2s; }
-    .sparkle:nth-child(3) { top: 5px; left: -25px; animation-delay: 0.4s; }
-
-    @keyframes popSparkle {
-      0% { transform: scale(0) translate(0, 0); opacity: 1; }
-      100% { transform: scale(1.4) translate(-10px, -15px); opacity: 0; }
-    }
+    .magic-sparkles { position: absolute; top: 10px; right: 10px; opacity: 0; transition: opacity 0.3s; }
+    .casting .magic-sparkles { opacity: 1; }
+    .sparkle { position: absolute; font-size: 14px; animation: popSparkle 0.8s ease-out infinite; }
+    @keyframes popSparkle { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.4) translate(-10px, -15px); opacity: 0; } }
 
     #webcam { display: none; }
 
-    /* แถบสถานะมือ */
+    /* Badge สถานะด้านบน */
     .hand-status-badge {
       display: none;
       align-items: center;
@@ -228,217 +135,126 @@
       font-size: 0.85rem;
       font-weight: 500;
       color: #e2d5ff;
-      margin-bottom: 16px;
-      backdrop-filter: blur(8px);
+      margin-bottom: 12px;
     }
 
-    /* ==========================================
-       การ์ดไพ่ Tarot & อนิเมชันการสลับไพ่
-       ========================================== */
-    .card-display {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      animation: fadeIn 0.8s ease;
-    }
-
-    .card-container-outer {
+    /* วนไพ่สุ่มเป็นวงรี (Ellipse Carousel 3D) */
+    .ellipse-container {
       position: relative;
-      width: 210px;
-      height: 340px;
-      perspective: 1000px;
+      width: 300px;
+      height: 150px;
+      margin: 10px 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      perspective: 800px;
     }
+
+    .mini-card {
+      position: absolute;
+      width: 55px;
+      height: 90px;
+      background: linear-gradient(135deg, #2a1147, #120624);
+      border: 1.5px solid var(--accent-gold);
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--accent-gold);
+      transition: transform 0.1s linear;
+    }
+
+    /* การ์ดหลัก */
+    .card-display { display: none; flex-direction: column; align-items: center; width: 100%; }
 
     .tarot-card {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      background: rgba(20, 10, 35, 0.75);
+      width: 210px;
+      height: 330px;
+      background: rgba(20, 10, 35, 0.8);
       border: 1.5px solid var(--accent-gold);
       border-radius: 16px;
-      box-shadow: 0 0 25px rgba(243, 216, 132, 0.25), inset 0 0 15px rgba(0,0,0,0.6);
+      box-shadow: 0 0 25px rgba(243, 216, 132, 0.25);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       padding: 20px 16px;
       backdrop-filter: blur(12px);
-      transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1), opacity 0.4s ease;
       cursor: pointer;
     }
 
-    /* การ์ดด้านหลังสำหรับอนิเมชันสับไพ่ */
-    .tarot-card-back {
-      background: linear-gradient(135deg, #1f0d3d 0%, #0d051c 100%);
-      border: 1.5px solid var(--accent-gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      color: var(--accent-gold);
-    }
-
-    .shuffling {
-      animation: shuffleAnim 0.6s ease-in-out infinite alternate;
-    }
-
-    @keyframes shuffleAnim {
-      0% { transform: translateX(0) rotate(0deg); }
-      50% { transform: translateX(-30px) rotate(-8deg); }
-      100% { transform: translateX(30px) rotate(8deg); }
-    }
-
-    .card-header {
-      font-size: 0.75rem;
-      letter-spacing: 2px;
-      color: #a393c8;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .card-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--accent-gold);
-      margin: 8px 0 2px 0;
-    }
-
-    .card-title-en {
-      font-size: 0.8rem;
-      color: #9f8ec2;
-      font-weight: 400;
-      margin-bottom: 10px;
-    }
-
-    .card-keywords {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-
-    .tag {
-      font-size: 0.7rem;
-      font-weight: 500;
-      background: rgba(243, 216, 132, 0.1);
-      border: 1px solid rgba(243, 216, 132, 0.3);
-      color: var(--accent-gold);
-      padding: 2px 8px;
-      border-radius: 10px;
-    }
-
-    .card-meaning {
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: #ded5f5;
-      font-weight: 400;
-      text-align: justify;
-      overflow-y: auto;
-      max-height: 130px;
-      padding-right: 4px;
-    }
-
-    .card-meaning::-webkit-scrollbar { width: 3px; }
-    .card-meaning::-webkit-scrollbar-thumb {
-      background: rgba(243, 216, 132, 0.4);
-      border-radius: 3px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .card-header { font-size: 0.75rem; letter-spacing: 2px; color: #a393c8; font-weight: 600; }
+    .card-title { font-size: 1.2rem; font-weight: 600; color: var(--accent-gold); margin: 6px 0 2px 0; }
+    .card-title-en { font-size: 0.8rem; color: #9f8ec2; margin-bottom: 8px; }
+    .card-keywords { display: flex; wrap: wrap; gap: 4px; justify-content: center; margin-bottom: 8px; }
+    .tag { font-size: 0.7rem; font-weight: 500; background: rgba(243, 216, 132, 0.1); border: 1px solid rgba(243, 216, 132, 0.3); color: var(--accent-gold); padding: 2px 6px; border-radius: 8px; }
+    .card-meaning { font-size: 0.85rem; line-height: 1.5; color: #ded5f5; text-align: justify; overflow-y: auto; max-height: 120px; }
   </style>
 </head>
 <body>
 
-  <!-- Canvas พื้นหลังดวงดาว 3D -->
   <canvas id="stars-canvas"></canvas>
 
   <div class="app-container">
     
-    <!-- หน้าแรก: ข้อความสอบถาม (จัดหน้าสมดุล มินิมอลแบบหนา) -->
     <div id="setup-screen" class="setup-card">
       <h1>ต้องการร่ายเวทมนต์กับคุณหมีหรือไม่</h1>
-
       <div class="btn-group">
         <button class="btn btn-primary" onclick="initMagicMode()">ต้องการ</button>
         <button class="btn" onclick="initTouchMode()">ไม่เป็นไร</button>
       </div>
     </div>
 
-    <!-- น้องหมีเวทมนตร์ -->
     <div id="bear-container" class="bear-wrapper">
       <div class="magic-sparkles">
-        <span class="sparkle">✨</span>
-        <span class="sparkle">⭐</span>
-        <span class="sparkle">✨</span>
+        <span class="sparkle">✨</span><span class="sparkle">⭐</span><span class="sparkle">✨</span>
       </div>
       <svg class="bear-svg" viewBox="0 0 120 120">
-        <circle cx="35" cy="35" r="14" fill="#a47854" />
-        <circle cx="35" cy="35" r="8" fill="#f3cbb0" />
-        <circle cx="85" cy="35" r="14" fill="#a47854" />
-        <circle cx="85" cy="35" r="8" fill="#f3cbb0" />
+        <circle cx="35" cy="35" r="14" fill="#a47854" /><circle cx="35" cy="35" r="8" fill="#f3cbb0" />
+        <circle cx="85" cy="35" r="14" fill="#a47854" /><circle cx="85" cy="35" r="8" fill="#f3cbb0" />
         <circle cx="60" cy="55" r="32" fill="#bc8c65" />
         <path d="M 32 40 Q 60 10 88 40 Z" fill="#2d124d" stroke="#f3d884" stroke-width="1.5"/>
         <ellipse cx="60" cy="40" rx="30" ry="6" fill="#190c2e" stroke="#f3d884" stroke-width="1.5"/>
         <circle cx="60" cy="18" r="3" fill="#f3d884" />
-        <circle cx="48" cy="52" r="3.5" fill="#2c1a0e" />
-        <circle cx="72" cy="52" r="3.5" fill="#2c1a0e" />
-        <circle cx="50" cy="50" r="1" fill="#ffffff" />
-        <circle cx="74" cy="50" r="1" fill="#ffffff" />
-        <ellipse cx="60" cy="60" rx="9" ry="6" fill="#f3cbb0" />
-        <ellipse cx="60" cy="58" rx="4" ry="2.5" fill="#2c1a0e" />
+        <circle cx="48" cy="52" r="3.5" fill="#2c1a0e" /><circle cx="72" cy="52" r="3.5" fill="#2c1a0e" />
+        <circle cx="50" cy="50" r="1" fill="#ffffff" /><circle cx="74" cy="50" r="1" fill="#ffffff" />
+        <ellipse cx="60" cy="60" rx="9" ry="6" fill="#f3cbb0" /><ellipse cx="60" cy="58" rx="4" ry="2.5" fill="#2c1a0e" />
         <path d="M 57 62 Q 60 65 63 62" stroke="#2c1a0e" stroke-width="1.5" fill="none" />
-        <circle cx="42" cy="58" r="4" fill="#ffb3ba" opacity="0.6" />
-        <circle cx="78" cy="58" r="4" fill="#ffb3ba" opacity="0.6" />
+        <circle cx="42" cy="58" r="4" fill="#ffb3ba" opacity="0.6" /><circle cx="78" cy="58" r="4" fill="#ffb3ba" opacity="0.6" />
         <path d="M 40 85 Q 60 75 80 85 L 85 110 Q 60 115 35 110 Z" fill="#a47854" />
         <g class="wand-arm">
           <path d="M 72 75 L 95 55" stroke="#795548" stroke-width="3.5" stroke-linecap="round" />
           <polygon points="95,47 98,53 104,55 98,57 95,63 92,57 86,55 92,53" fill="#f3d884" />
-          <path d="M 70 78 Q 80 72 85 62" stroke="#bc8c65" stroke-width="7" stroke-linecap="round" fill="none" />
+          <path d="M 70 78 Q 80 72 85 62" stroke="#bc8c65" stroke-width="7" fill="none" />
         </g>
-        <path d="M 50 78 Q 40 85 38 95" stroke="#bc8c65" stroke-width="7" stroke-linecap="round" fill="none" />
+        <path d="M 50 78 Q 40 85 38 95" stroke="#bc8c65" stroke-width="7" fill="none" />
       </svg>
     </div>
 
-    <!-- แถบแสดงสถานะมือ -->
     <div id="hand-status" class="hand-status-badge">
       <span id="hand-icon">✋</span>
       <span id="hand-text">กำลังค้นหามือ...</span>
     </div>
 
-    <!-- ส่วนแสดงการ์ดไพ่ Tarot -->
+    <div id="ellipse-carousel" class="ellipse-container"></div>
+
     <div id="card-display" class="card-display">
-      <div class="card-container-outer" onclick="startShuffleDraw()">
-        
-        <!-- การ์ดเฉลยคำทำนาย -->
-        <div class="tarot-card" id="main-card">
-          <div class="card-header" id="card-arcana">MAJOR ARCANA</div>
-          <div>
-            <div class="card-title" id="card-name-th">แตะเพื่อสลับและสุ่มไพ่</div>
-            <div class="card-title-en" id="card-name-en">Tap or Gestures to Shuffle</div>
-            <div class="card-keywords" id="card-keywords">
-              <span class="tag">ชะตาชีวิต</span>
-              <span class="tag">คำตอบ</span>
-            </div>
-          </div>
-          <div class="card-meaning" id="card-meaning">
-            แตะที่ไพ่ หรือกำมือ (✊) เพื่อให้คุณหมีร่ายเวทมนตร์สลับไพ่แล้วเปิดคำทำนายของคุณ
+      <div class="tarot-card" onclick="startEllipseShuffle()">
+        <div class="card-header" id="card-arcana">MAJOR ARCANA</div>
+        <div>
+          <div class="card-title" id="card-name-th">แตะเพื่อวนสุ่มไพ่</div>
+          <div class="card-title-en" id="card-name-en">Tap or Gestures to Shuffle</div>
+          <div class="card-keywords" id="card-keywords">
+            <span class="tag">ชะตาชีวิต</span><span class="tag">คำตอบ</span>
           </div>
         </div>
-
-        <!-- การ์ดหลังไพ่ (สำหรับอนิเมชันสับไพ่) -->
-        <div class="tarot-card tarot-card-back" id="back-card" style="display: none;">
-          ✨ 🔮 ✨
+        <div class="card-meaning" id="card-meaning">
+          แตะที่ไพ่ หรือกำมือ (✊) เพื่อให้คุณหมีหมุนวนไพ่สุ่มคำทำนายให้คุณ
         </div>
-
       </div>
 
-      <button class="btn btn-primary" style="margin-top: 22px; width: 100%; max-width: 240px;" onclick="startShuffleDraw()">🔮 สับและสุ่มไพ่ใหม่</button>
+      <button class="btn btn-primary" style="margin-top: 18px; width: 100%; max-width: 220px;" onclick="startEllipseShuffle()">🔮 สุ่มไพ่ใหม่</button>
     </div>
 
   </div>
@@ -446,86 +262,54 @@
   <video id="webcam" playsinline></video>
 
   <script>
-    /* ==========================================
-       1. ระบบเสียงแฟนตาซีเวทมนตร์ (Web Audio API)
-       ========================================== */
+    /* 1. Web Audio API เสียงเวทมนตร์ & เสียงไพ่หมุน */
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playMagicSound() {
       if (audioCtx.state === 'suspended') audioCtx.resume();
-      
       const now = audioCtx.currentTime;
-      const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // โน้ตเพลงแฟนตาซี C E G C E
-      
-      notes.forEach((freq, index) => {
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now + index * 0.08);
-        
-        gain.gain.setValueAtTime(0.15, now + index * 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.08 + 0.5);
-        
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        
-        osc.start(now + index * 0.08);
-        osc.stop(now + index * 0.08 + 0.5);
+        osc.frequency.setValueAtTime(freq, now + i * 0.08);
+        gain.gain.setValueAtTime(0.12, now + i * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.4);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(now + i * 0.08); osc.stop(now + i * 0.08 + 0.4);
       });
     }
 
-    function playShuffleSound() {
+    function playCardCarouselSound() {
       if (audioCtx.state === 'suspended') audioCtx.resume();
-      
       const now = audioCtx.currentTime;
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 8; i++) {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(150 + Math.random() * 100, now + i * 0.1);
-        
-        gain.gain.setValueAtTime(0.08, now + i * 0.1);
-        gain.gain.linearRampToValueAtTime(0.01, now + i * 0.1 + 0.08);
-        
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        
-        osc.start(now + i * 0.1);
-        osc.stop(now + i * 0.1 + 0.08);
+        osc.frequency.setValueAtTime(200 + Math.random() * 120, now + i * 0.06);
+        gain.gain.setValueAtTime(0.05, now + i * 0.06);
+        gain.gain.linearRampToValueAtTime(0.005, now + i * 0.06 + 0.05);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(now + i * 0.06); osc.stop(now + i * 0.06 + 0.05);
       }
     }
 
-    /* ==========================================
-       2. ฐานข้อมูลไพ่ Tarot 78 ใบ (ตัวอย่าง Major Arcana)
-       ========================================== */
+    /* 2. JSON Tarot Deck */
     const tarotDeck = [
-      { id: "m00", arcana: "Major Arcana", nameEn: "The Fool", nameTh: "ผู้เริ่มต้น", keywords: ["จุดเริ่มต้น", "อิสระ", "การเสี่ยงโชค"], meaning: "คุณกำลังยืนอยู่ตรงจุดเริ่มต้นของการเดินทางครั้งใหม่ในชีวิต ปล่อยวางความกลัวและเชื่อมั่นในสัญชาตญาณ" },
-      { id: "m01", arcana: "Major Arcana", nameEn: "The Magician", nameTh: "นักมายากล", keywords: ["ศักยภาพ", "การลงมือทำ", "ไหวพริบ"], meaning: "ทรัพยากรทุกอย่างพร้อมแล้วในมือคุณ จงมั่นใจและเริ่มแปรเปลี่ยนความฝันให้กลายเป็นความจริง" },
-      { id: "m02", arcana: "Major Arcana", nameEn: "The High Priestess", nameTh: "นักบวชหญิง", keywords: ["สัญชาตญาณ", "ความเงียบ", "ปัญญาภายใน"], meaning: "คำตอบซ่อนอยู่ในจิตใจของคุณ รับฟังเสียงสัญชาตญาณและสังเกตการณ์อย่างเงียบๆ" },
-      { id: "m03", arcana: "Major Arcana", nameEn: "The Empress", nameTh: "จักรพรรดินี", keywords: ["ความอุดมสมบูรณ์", "ความรัก", "การเติบโต"], meaning: "ช่วงเวลาแห่งผลลัพธ์และการดูแลเอาใจใส่ สิ่งที่คุณปลูกไว้นั้นกำลังเติบโตและงอกงาม" },
-      { id: "m04", arcana: "Major Arcana", nameEn: "The Emperor", nameTh: "จักรพรรดิ", keywords: ["โครงสร้าง", "ระเบียบวินัย", "อำนาจ"], meaning: "ใช้ความเด็ดขาดและระเบียบวินัยในการจัดระเบียบชีวิต คุณมีอำนาจในการควบคุมสถานการณ์" },
-      { id: "m06", arcana: "Major Arcana", nameEn: "The Lovers", nameTh: "คู่รัก", keywords: ["ความสัมพันธ์", "ทางเลือก", "ความสอดคล้อง"], meaning: "สื่อถึงความผูกพันและการเลือกที่มาจากหัวใจ จงเลือกทางเดินที่ซื่อสัตย์ต่อค่านิยมของตนเอง" },
-      { id: "m07", arcana: "Major Arcana", nameEn: "The Chariot", nameTh: "อัศวินรถศึก", keywords: ["ความมุ่งมั่น", "ชัยชนะ", "การควบคุม"], meaning: "มุ่งหน้าไปข้างหน้าด้วยเจตจำนงที่แรงกล้า การควบคุมอารมณ์และวินัยจะนำพาชัยชนะมาให้" },
-      { id: "m10", arcana: "Major Arcana", nameEn: "Wheel of Fortune", nameTh: "กงล้อแห่งโชคชะตา", keywords: ["การเปลี่ยนแปลง", "โชคชะตา", "โอกาสใหม่"], meaning: "วัฏจักรชีวิตกำลังหมุนเปลี่ยน ยอมรับความไม่แน่นอนและเปิดรับโอกาสใหม่ๆ ที่กำลังเข้ามา" },
-      { id: "m17", arcana: "Major Arcana", nameEn: "The Star", nameTh: "ดวงดาวแห่งความหวัง", keywords: ["ความหวัง", "การเยียวยา", "แรงบันดาลใจ"], meaning: "พายุร้ายได้ผ่านพ้นไปแล้ว แสงสว่างและความสงบกำลังกลับคืนมา จงศรัทธาในอนาคต" },
-      { id: "m19", arcana: "Major Arcana", nameEn: "The Sun", nameTh: "ดวงอาทิตย์", keywords: ["ความสำเร็จ", "ความสุข", "พลังชีวิต"], meaning: "ไพ่แห่งความโชคดีและความสดใส ทุกสิ่งที่ทำจะได้รับผลตอบแทนงดงาม เต็มไปด้วยพลังบวก" },
-      { id: "m21", arcana: "Major Arcana", nameEn: "The World", nameTh: "โลกสมบูรณ์", keywords: ["ความสำเร็จสมบูรณ์", "บรรลุเป้าหมาย", "ความกลมกลืน"], meaning: "การเดินทางยาวนานบรรลุผลสำเร็จ คุณพร้อมแล้วสำหรับการก้าวเข้าสู่บทใหม่ของชีวิต" }
+      { id: "m00", arcana: "Major Arcana", nameEn: "The Fool", nameTh: "ผู้เริ่มต้น", keywords: ["จุดเริ่มต้น", "อิสระ"], meaning: "คุณกำลังยืนอยู่ตรงจุดเริ่มต้นของการเดินทางครั้งใหม่ในชีวิต ปล่อยวางความกลัวและเชื่อมั่นในสัญชาตญาณ" },
+      { id: "m01", arcana: "Major Arcana", nameEn: "The Magician", nameTh: "นักมายากล", keywords: ["ศักยภาพ", "ไหวพริบ"], meaning: "ทรัพยากรทุกอย่างพร้อมแล้วในมือคุณ จงมั่นใจและเริ่มแปรเปลี่ยนความฝันให้กลายเป็นความจริง" },
+      { id: "m02", arcana: "Major Arcana", nameEn: "The High Priestess", nameTh: "นักบวชหญิง", keywords: ["สัญชาตญาณ", "ปัญญา"], meaning: "คำตอบซ่อนอยู่ในจิตใจของคุณ รับฟังเสียงสัญชาตญาณและสังเกตการณ์อย่างเงียบๆ" },
+      { id: "m03", arcana: "Major Arcana", nameEn: "The Empress", nameTh: "จักรพรรดินี", keywords: ["ความอุดมสมบูรณ์", "ความรัก"], meaning: "ช่วงเวลาแห่งผลลัพธ์และการดูแลเอาใจใส่ สิ่งที่คุณปลูกไว้นั้นกำลังเติบโตและงอกงาม" },
+      { id: "m17", arcana: "Major Arcana", nameEn: "The Star", nameTh: "ดวงดาวแห่งความหวัง", keywords: ["ความหวัง", "แรงบันดาลใจ"], meaning: "พายุร้ายได้ผ่านพ้นไปแล้ว แสงสว่างและความสงบกำลังกลับคืนมา จงศรัทธาในอนาคต" },
+      { id: "m19", arcana: "Major Arcana", nameEn: "The Sun", nameTh: "ดวงอาทิตย์", keywords: ["ความสำเร็จ", "พลังชีวิต"], meaning: "ไพ่แห่งความโชคดีและความสดใส ทุกสิ่งที่ทำจะได้รับผลตอบแทนงดงาม เต็มไปด้วยพลังบวก" }
     ];
 
-    /* ==========================================
-       3. ระบบดวงดาว 3D Background
-       ========================================== */
+    /* 3. 3D Stars Canvas */
     const canvas = document.getElementById('stars-canvas');
     const ctx = canvas.getContext('2d');
     let stars = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
     class Star {
       constructor() {
         this.x = (Math.random() - 0.5) * canvas.width * 2;
@@ -533,183 +317,167 @@
         this.z = Math.random() * canvas.width;
         this.size = Math.random() * 1.5 + 0.5;
         this.alpha = Math.random();
-        this.speed = 0.5;
       }
-
-      update() {
-        this.z -= this.speed;
-        if (this.z <= 0) {
-          this.z = canvas.width;
-          this.x = (Math.random() - 0.5) * canvas.width * 2;
-          this.y = (Math.random() - 0.5) * canvas.height * 2;
-        }
-      }
-
+      update() { this.z -= 0.5; if (this.z <= 0) this.z = canvas.width; }
       draw() {
         const sx = (this.x / this.z) * canvas.width + canvas.width / 2;
         const sy = (this.y / this.z) * canvas.height + canvas.height / 2;
-        const radius = (1 - this.z / canvas.width) * this.size * 2;
-
         if (sx >= 0 && sx <= canvas.width && sy >= 0 && sy <= canvas.height) {
-          ctx.beginPath();
-          ctx.arc(sx, sy, Math.max(0.2, radius), 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(243, 216, 132, ${this.alpha})`;
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = "#f3d884";
-          ctx.fill();
+          ctx.beginPath(); ctx.arc(sx, sy, Math.max(0.2, (1 - this.z / canvas.width) * this.size * 2), 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(243, 216, 132, ${this.alpha})`; ctx.fill();
         }
       }
     }
+    function initStars() { resizeCanvas(); stars = Array.from({ length: 120 }, () => new Star()); }
+    function animateStars() { ctx.clearRect(0, 0, canvas.width, canvas.height); stars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animateStars); }
+    window.addEventListener('resize', resizeCanvas); initStars(); animateStars();
 
-    function initStars() {
-      resizeCanvas();
-      stars = Array.from({ length: 150 }, () => new Star());
-    }
-
-    function animateStars() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      stars.forEach(star => {
-        star.update();
-        star.draw();
-      });
-      requestAnimationFrame(animateStars);
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    initStars();
-    animateStars();
-
-    /* ==========================================
-       4. ระบบการสุ่มไพ่แบบสับสำรับ (Shuffle Animation)
-       ========================================== */
+    /* 4. อนิเมชันการวนไพ่สุ่มเป็นวงรี 3D */
+    const carousel = document.getElementById('ellipse-carousel');
+    const totalMiniCards = 8;
+    let angleOffset = 0;
     let isShuffling = false;
+    let isGestureMode = false;
 
-    function startShuffleDraw() {
+    function createEllipseCards() {
+      carousel.innerHTML = '';
+      for (let i = 0; i < totalMiniCards; i++) {
+        const card = document.createElement('div');
+        card.className = 'mini-card';
+        card.innerText = '✨';
+        carousel.appendChild(card);
+      }
+    }
+
+    function updateEllipsePosition() {
+      const cards = carousel.children;
+      const rx = 110, ry = 35;
+      for (let i = 0; i < cards.length; i++) {
+        const angle = angleOffset + (i * (2 * Math.PI / cards.length));
+        const x = Math.cos(angle) * rx;
+        const y = Math.sin(angle) * ry;
+        const scale = 0.6 + (y + ry) / (2 * ry) * 0.4;
+        const zIndex = Math.round((y + ry) * 10);
+        cards[i].style.transform = `translate3d(${x}px, ${y}px, 0px) scale(${scale})`;
+        cards[i].style.zIndex = zIndex;
+      }
+    }
+
+    function updateBadgeStatus(icon, text) {
+      document.getElementById('hand-icon').innerText = icon;
+      document.getElementById('hand-text').innerText = text;
+    }
+
+    function startEllipseShuffle() {
       if (isShuffling) return;
       isShuffling = true;
 
-      const mainCard = document.getElementById('main-card');
-      const backCard = document.getElementById('back-card');
-      const bearContainer = document.getElementById('bear-container');
+      const bear = document.getElementById('bear-container');
+      const cardDisplay = document.getElementById('card-display');
 
-      // เริ่มเอฟเฟกต์หมีร่ายเวทและเสียง
-      bearContainer.classList.add('casting');
-      playShuffleSound();
+      bear.classList.add('casting');
+      cardDisplay.style.display = 'none';
+      carousel.style.display = 'flex';
 
-      // แสดงการ์ดหลังไพ่แล้วสับไพ่
-      mainCard.style.display = 'none';
-      backCard.style.display = 'flex';
-      backCard.classList.add('shuffling');
+      if (isGestureMode) {
+        updateBadgeStatus("✊", "คุณหมีกำลังร่ายเวทมนตร์หมุนไพ่...");
+      }
 
-      setTimeout(() => {
-        backCard.classList.remove('shuffling');
-        backCard.style.display = 'none';
-        
-        // สุ่มข้อมูลไพ่ใหม่
-        const randomIndex = Math.floor(Math.random() * tarotDeck.length);
-        const card = tarotDeck[randomIndex];
+      playCardCarouselSound();
 
-        document.getElementById('card-arcana').innerText = card.arcana;
-        document.getElementById('card-name-th').innerText = card.nameTh;
-        document.getElementById('card-name-en').innerText = card.nameEn;
-        document.getElementById('card-meaning').innerText = card.meaning;
-        
-        const keywordsHTML = card.keywords.map(k => `<span class="tag">${k}</span>`).join('');
-        document.getElementById('card-keywords').innerHTML = keywordsHTML;
+      let startTime = null;
+      const duration = 1200;
 
-        // แสดงหน้าไพ่พร้อมเสียงเวทมนตร์
-        mainCard.style.display = 'flex';
-        playMagicSound();
-        
-        bearContainer.classList.remove('casting');
-        isShuffling = false;
-      }, 1000);
+      function animateCarousel(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = timestamp - startTime;
+        angleOffset += 0.25;
+        updateEllipsePosition();
+
+        if (progress < duration) {
+          requestAnimationFrame(animateCarousel);
+        } else {
+          carousel.style.display = 'none';
+          cardDisplay.style.display = 'flex';
+          bear.classList.remove('casting');
+          
+          // สุ่มข้อมูลไพ่
+          const card = tarotDeck[Math.floor(Math.random() * tarotDeck.length)];
+          document.getElementById('card-arcana').innerText = card.arcana;
+          document.getElementById('card-name-th').innerText = card.nameTh;
+          document.getElementById('card-name-en').innerText = card.nameEn;
+          document.getElementById('card-meaning').innerText = card.meaning;
+          document.getElementById('card-keywords').innerHTML = card.keywords.map(k => `<span class="tag">${k}</span>`).join('');
+          
+          playMagicSound();
+          isShuffling = false;
+
+          if (isGestureMode) {
+            updateBadgeStatus("✋", "พร้อมร่ายเวท (กำมือเพื่อหมุนสุ่มไพ่)");
+          }
+        }
+      }
+      requestAnimationFrame(animateCarousel);
     }
 
+    /* 5. Mode Handlers */
     function initTouchMode() {
+      isGestureMode = false;
       playMagicSound();
       document.getElementById('setup-screen').style.display = 'none';
       document.getElementById('bear-container').style.display = 'flex';
-      document.getElementById('card-display').style.display = 'flex';
-      startShuffleDraw();
+      createEllipseCards();
+      startEllipseShuffle();
     }
 
-    /* ==========================================
-       5. ระบบตรวจจับท่าทางมือ (Magic Gesture Mode)
-       ========================================== */
     let lastGestureTime = 0;
-
     function initMagicMode() {
+      isGestureMode = true;
       playMagicSound();
       document.getElementById('setup-screen').style.display = 'none';
       document.getElementById('bear-container').style.display = 'flex';
       document.getElementById('hand-status').style.display = 'flex';
-      document.getElementById('card-display').style.display = 'flex';
       
+      createEllipseCards();
+      updateBadgeStatus("✨", "กำลังเปิดระบบตรวจจับมือ...");
+
       const videoElement = document.getElementById('webcam');
-
-      const hands = new Hands({
-        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
-      });
-
-      hands.setOptions({
-        maxNumHands: 1,
-        modelComplexity: 1,
-        minDetectionConfidence: 0.6,
-        minTrackingConfidence: 0.6
-      });
-
+      const hands = new Hands({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}` });
+      hands.setOptions({ maxNumHands: 1, modelComplexity: 1, minDetectionConfidence: 0.6, minTrackingConfidence: 0.6 });
       hands.onResults(onHandResults);
 
       const camera = new Camera(videoElement, {
-        onFrame: async () => {
-          await hands.send({ image: videoElement });
-        },
-        width: 640,
-        height: 480
+        onFrame: async () => { await hands.send({ image: videoElement }); },
+        width: 640, height: 480
       });
 
       camera.start()
-        .then(() => {
-          document.getElementById('hand-text').innerText = "พร้อมร่ายเวทมนตร์ (แบ/กำมือ)";
-        })
-        .catch(err => {
-          document.getElementById('hand-text').innerText = "ใช้ระบบแตะสัมผัส";
-        });
-        
-      startShuffleDraw();
+        .then(() => updateBadgeStatus("✋", "พร้อมร่ายเวท (กำมือเพื่อหมุนสุ่มไพ่)"))
+        .catch(() => updateBadgeStatus("👆", "ไม่พบกล้อง เปลี่ยนเป็นระบบแตะสัมผัส"));
+
+      startEllipseShuffle();
     }
 
     function onHandResults(results) {
-      const iconEl = document.getElementById('hand-icon');
-      const textEl = document.getElementById('hand-text');
+      if (isShuffling) return;
 
       if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
         const landmarks = results.multiHandLandmarks[0];
-        const indexTip = landmarks[8];
-        const wrist = landmarks[0];
-        const distance = Math.hypot(indexTip.x - wrist.x, indexTip.y - wrist.y);
-
+        const distance = Math.hypot(landmarks[8].x - landmarks[0].x, landmarks[8].y - landmarks[0].y);
         const now = Date.now();
 
-        if (distance < 0.25) { 
-          iconEl.innerText = "✊";
-          textEl.innerText = "คุณหมีกำลังสลับไพ่...";
-          
-          if (now - lastGestureTime > 2000 && !isShuffling) {
-            startShuffleDraw();
+        if (distance < 0.25) { // ท่ากำมือ ✊
+          if (now - lastGestureTime > 2000) {
             lastGestureTime = now;
+            startEllipseShuffle();
           }
-        } else {
-          iconEl.innerText = "✋";
-          textEl.innerText = "กำมือเพื่อสลับและสุ่มไพ่";
+        } else { // ท่าแบมือ ✋
+          updateBadgeStatus("✋", "พร้อมร่ายเวท (กำมือเพื่อหมุนสุ่มไพ่)");
         }
       } else {
-        iconEl.innerText = "✨";
-        textEl.innerText = "กำลังค้นหามือ...";
+        updateBadgeStatus("✨", "กำลังค้นหามือ...");
       }
     }
   </script>
 </body>
 </html>
-

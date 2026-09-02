@@ -300,27 +300,30 @@
     function playCardCarouselSound() {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       const now = audioCtx.currentTime;
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 10; i++) {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(180 + Math.random() * 140, now + i * 0.06);
-        gain.gain.setValueAtTime(0.06, now + i * 0.06);
-        gain.gain.linearRampToValueAtTime(0.005, now + i * 0.06 + 0.05);
+        osc.frequency.setValueAtTime(180 + Math.random() * 140, now + i * 0.12);
+        gain.gain.setValueAtTime(0.06, now + i * 0.12);
+        gain.gain.linearRampToValueAtTime(0.005, now + i * 0.12 + 0.08);
         osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(now + i * 0.06); osc.stop(now + i * 0.06 + 0.05);
+        osc.start(now + i * 0.12); osc.stop(now + i * 0.12 + 0.08);
       }
     }
 
     /* 2. ฐานข้อมูลไพ่ Tarot */
-    const tarotDeck = [
-      { id: "m00", arcana: "Major Arcana", nameEn: "The Fool", nameTh: "ผู้เริ่มต้น", keywords: ["จุดเริ่มต้น", "อิสระ"], meaning: "คุณกำลังยืนอยู่ตรงจุดเริ่มต้นของการเดินทางครั้งใหม่ในชีวิต ปล่อยวางความกลัวและเชื่อมั่นในสัญชาตญาณ" },
-      { id: "m01", arcana: "Major Arcana", nameEn: "The Magician", nameTh: "นักมายากล", keywords: ["ศักยภาพ", "ไหวพริบ"], meaning: "ทรัพยากรทุกอย่างพร้อมแล้วในมือคุณ จงมั่นใจและเริ่มแปรเปลี่ยนความฝันให้กลายเป็นความจริง" },
-      { id: "m02", arcana: "Major Arcana", nameEn: "The High Priestess", nameTh: "นักบวชหญิง", keywords: ["สัญชาตญาณ", "ปัญญา"], meaning: "คำตอบซ่อนอยู่ในจิตใจของคุณ รับฟังเสียงสัญชาตญาณและสังเกตการณ์อย่างเงียบๆ" },
-      { id: "m03", arcana: "Major Arcana", nameEn: "The Empress", nameTh: "จักรพรรดินี", keywords: ["ความอุดมสมบูรณ์", "ความรัก"], meaning: "ช่วงเวลาแห่งผลลัพธ์และการดูแลเอาใจใส่ สิ่งที่คุณปลูกไว้นั้นกำลังเติบโตและงอกงาม" },
-      { id: "m17", arcana: "Major Arcana", nameEn: "The Star", nameTh: "ดวงดาวแห่งความหวัง", keywords: ["ความหวัง", "แรงบันดาลใจ"], meaning: "พายุร้ายได้ผ่านพ้นไปแล้ว แสงสว่างและความสงบกำลังกลับคืนมา จงศรัทธาในอนาคต" },
-      { id: "m19", arcana: "Major Arcana", nameEn: "The Sun", nameTh: "ดวงอาทิตย์", keywords: ["ความสำเร็จ", "พลังชีวิต"], meaning: "ไพ่แห่งความโชคดีและความสดใส ทุกสิ่งที่ทำจะได้รับผลตอบแทนงดงาม เต็มไปด้วยพลังบวก" }
-    ];
+    let tarotDeck = [];
+    fetch('cards.json')
+      .then(res => res.json())
+      .then(data => { tarotDeck = data; })
+      .catch(() => {
+        tarotDeck = [
+          { id: "m00", arcana: "Major Arcana", nameEn: "The Fool", nameTh: "ผู้เริ่มต้น", keywords: ["จุดเริ่มต้น", "อิสระ"], meaning: "คุณกำลังยืนอยู่ตรงจุดเริ่มต้นของการเดินทางครั้งใหม่ในชีวิต ปล่อยวางความกลัวและเชื่อมั่นในสัญชาตญาณ" },
+          { id: "m01", arcana: "Major Arcana", nameEn: "The Magician", nameTh: "นักมายากล", keywords: ["ศักยภาพ", "ไหวพริบ"], meaning: "ทรัพยากรทุกอย่างพร้อมแล้วในมือคุณ จงมั่นใจและเริ่มแปรเปลี่ยนความฝันให้กลายเป็นความจริง" },
+          { id: "m02", arcana: "Major Arcana", nameEn: "The High Priestess", nameTh: "นักบวชหญิง", keywords: ["สัญชาตญาณ", "ปัญญา"], meaning: "คำตอบซ่อนอยู่ในจิตใจของคุณ รับฟังเสียงสัญชาตญาณและสังเกตการณ์อย่างเงียบๆ" }
+        ];
+      });
 
     /* 3. Background ดวงดาว */
     const canvas = document.getElementById('stars-canvas');
@@ -349,7 +352,7 @@
     function animateStars() { ctx.clearRect(0, 0, canvas.width, canvas.height); stars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animateStars); }
     window.addEventListener('resize', resizeCanvas); initStars(); animateStars();
 
-    /* 4. อนิเมชันไพ่หมุนเป็นวงรีเต็มจอ (Full Screen Ellipse) */
+    /* 4. อนิเมชันไพ่หมุนเป็นวงรีเต็มจอแบบชะลอความเร็ว */
     const carousel = document.getElementById('ellipse-carousel');
     const totalMiniCards = 10;
     let angleOffset = 0;
@@ -368,7 +371,6 @@
 
     function updateEllipsePosition() {
       const cards = carousel.children;
-      // ปรับรัศมีวงรีให้กว้างเต็มหน้าจอ
       const rx = Math.min(window.innerWidth * 0.4, 380);
       const ry = Math.min(window.innerHeight * 0.28, 200);
 
@@ -400,23 +402,26 @@
       carousel.style.display = 'flex';
 
       if (isGestureMode) {
-        updateBadgeStatus("✊", "คุณหมีกำลังหมุนสุ่มไพ่เต็มจอ...");
+        updateBadgeStatus("✊", "คุณหมีกำลังหมุนสุ่มไพ่...");
       }
 
       playCardCarouselSound();
 
       let startTime = null;
-      const duration = 1400; // เพิ่มเวลาหมุนวงรีให้นุ่มนวล ชัดเจน
+      const duration = 1600; // เวลาในการหมุนสุ่ม
 
       function animateCarousel(timestamp) {
         if (!startTime) startTime = timestamp;
         const progress = timestamp - startTime;
-        angleOffset += 0.22;
+        
+        // ปรับความเร็วการหมุนไพ่ให้ช้าลง นุ่มนวล ชัดเจนขึ้น (จาก 0.22 เหลือ 0.06)
+        angleOffset += 0.06;
         updateEllipsePosition();
 
         if (progress < duration) {
           requestAnimationFrame(animateCarousel);
         } else {
+          // หยุดหมุน ปิดวงรี และโชว์ผลการทำนายค้างไว้อ่าน
           carousel.style.display = 'none';
           cardDisplay.style.display = 'flex';
           bear.classList.remove('casting');
@@ -432,7 +437,7 @@
           isShuffling = false;
 
           if (isGestureMode) {
-            updateBadgeStatus("✋", "พร้อมร่ายเวท (กำมือเพื่อหมุนสุ่มไพ่)");
+            updateBadgeStatus("✋", "อ่านคำทำนายเรียบร้อย (กำมือหากต้องการสุ่มใหม่)");
           }
         }
       }
@@ -484,30 +489,26 @@
 
       if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
         const landmarks = results.multiHandLandmarks[0];
-        
-        // คำนวณระยะห่างเพื่อแยกแยะแบมือ (✋) และกำมือ (✊)
         const distance = Math.hypot(landmarks[8].x - landmarks[0].x, landmarks[8].y - landmarks[0].y);
         const now = Date.now();
 
         if (distance < 0.25) { 
-          // กำมือ (✊) -> ต้องกำค้างไว้ 400ms เพื่อยืนยันคำสั่ง
+          // กำมือ (✊) ค้างไว้ 0.5s ถึงจะเริ่มสุ่มใหม่
           if (fistHoldStartTime === 0) {
             fistHoldStartTime = now;
-          } else if (now - fistHoldStartTime > 400 && now - lastShuffleTriggerTime > 2500) {
-            updateBadgeStatus("✊", "ตรวจพบการกำมือ! กำลังร่ายเวท...");
+          } else if (now - fistHoldStartTime > 500 && now - lastShuffleTriggerTime > 3000) {
+            updateBadgeStatus("✊", "ตรวจพบการกำมือ! กำลังร่ายเวทสุ่มใหม่...");
             lastShuffleTriggerTime = now;
             fistHoldStartTime = 0;
             startEllipseShuffle();
           }
         } else {
-          // แบมือ (✋) -> รีเซ็ตเวลากำมือ
           fistHoldStartTime = 0;
-          updateBadgeStatus("✋", "พร้อมร่ายเวท (กำมือเพื่อหมุนสุ่มไพ่)");
+          updateBadgeStatus("✋", "พร้อมร่ายเวท (กำมือหากต้องการสุ่มใหม่)");
         }
       } else {
-        // เอามือลง หรือไม่มีมือโชว์ -> อยู่เฉยๆ ไม่ต้องทำอะไร
         fistHoldStartTime = 0;
-        updateBadgeStatus("✨", "พร้อมร่ายเวท (ยกมือขึ้นเพื่อควบคุม)");
+        updateBadgeStatus("✨", "พร้อมร่ายเวท (ยกมือขึ้นเพื่อสุ่มใหม่)");
       }
     }
   </script>
